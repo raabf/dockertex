@@ -5,10 +5,10 @@ DOCKERTEX_HOME="${0:A:h}"
 
 dockertex()
 {
-    "${DOCKERTEX_HOME}"/dockertex.sh ${@}
+    "${DOCKERTEX_HOME}"/bin/dockertex.sh ${@}
 }    
 
 dockertexlatex()
 {
-    "${DOCKERTEX_HOME}"/dockertexlatex.sh ${@}
+    "${DOCKERTEX_HOME}"/bin/dockertexlatex.sh ${@}
 }    
