@@ -117,6 +117,8 @@ cp "$SCRIPTPATH/misc/dockertexstudio.desktop" \
 
 echo "Exec=$SCRIPTPATH/bin/dockertexstudio.sh %F" >> "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
 
+chmod a-x "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR 
+
 echo "Icon=texstudio" >> "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
 
 exit $EXIT_SUCCESS
