@@ -133,7 +133,7 @@ docker run --interactive --tty --rm \
     --user="$(id --user):$(id --group)" \
     -e DISPLAY=unix$DISPLAY \
     --volume=$HOME/.config/dockertexstudio:/home/.config/texstudio \
-    --volume=$HOME/:/home/host/ \
+    --volume=$HOME/:$HOME/ \
     -e HOME=/home/ \
     --name=texstudio --workdir=/home/ \
     $TEXSTUDIO_IMAGE_NAME:$image_tag texstudio "$@"
