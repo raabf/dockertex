@@ -119,6 +119,7 @@ shift $(( OPTIND - 1 ))
 # Testing if there are enough arguments
 if (( $# < 1 )) ; then
  echo -e "${Red}At least one argument is required.${RCol}" >&2
+ echo -e "" 
  usage $EXIT_ERROR
 fi
 
