@@ -37,7 +37,7 @@ Whi='\e[0;37m';     BWhi='\e[1;37m';    UWhi='\e[4;37m';    IWhi='\e[0;97m';    
 
 function usage #(exit_code: Optional) 
 {
-echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}--icon-prefix ${UGre}icons dir${RCol}] [${Blu}--app-prefix ${UGre}applications dir${RCol}] 
+echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} ${Blu}--menu-tag ${UGre}tagname${RCol} [${Blu}--icon-prefix ${UGre}icons dir${RCol}] [${Blu}--app-prefix ${UGre}applications dir${RCol}] 
        ${Yel}$SCRIPTNAME${RCol} [${Blu}-h|--help${RCol}]
 
     Installs texstudio menu entry in user home or in the specifed directories.
@@ -45,6 +45,10 @@ echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}--icon-prefix ${UGre}icons dir${
 ${BRed}OPTIONS:${RCol}
     ${Blu}-h, --help${RCol}
         Print this help and exit.
+    
+    ${Blu}--menu-tag ${UGre}tagname${RCol}
+        Installs a menu entry, which starts texstudio in the texstudio
+        docker-container with tag ${UGre}tagname${RCol}.
 
     ${Blu}--icon-prefix ${UGre}icons dir${RCol}
         The script copies the texstudio icon to ${UGre}icons dir${RCol}.
@@ -80,6 +84,9 @@ while getopts "$optspec" OPTION ; do
                 app-prefix)
                     applications_prefix="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
+                menu-tag)
+                    menu_tag="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    ;;
 				*)	
 				if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
 			        echo -e "${Red}Unknown option \"-$OPTARG\".${RCol}" >&2
@@ -108,17 +115,24 @@ shift $(( OPTIND - 1 ))
 
 ####### Commands ######
 
+if [ -z $menu_tag ]; then
+    echo -e "${Red}${Blu}--menu-tag${Red} was omitted. Please specify a ${UGre}tagname${Red}.${RCol}" >&2
+    exit $EXIT_FAILURE
+fi
+
+
 cp --recursive --no-target-directory \
     "$SCRIPTPATH/misc/icons/" \
     "$icon_prefix" || exit $EXIT_ERROR
 
+desktop_file="$applications_prefix/dockertexstudio-$menu_tag.desktop" 
+
 cp "$SCRIPTPATH/misc/dockertexstudio.desktop" \
-    "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
+    "$desktop_file" || exit $EXIT_ERROR
+chmod a-x "$desktop_file" || exit $EXIT_ERROR 
 
-echo "Exec=$SCRIPTPATH/bin/dockertexstudio.sh %F" >> "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
-
-chmod a-x "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR 
-
-echo "Icon=texstudio" >> "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
+echo "Name=Docker TexStudio ($menu_tag)" >> "$desktop_file" || exit $EXIT_ERROR
+echo "Exec=$SCRIPTPATH/bin/dockertexstudio.sh --tag $menu_tag %F" >> "$desktop_file" || exit $EXIT_ERROR
+echo "Icon=texstudio" >> "$desktop_file" || exit $EXIT_ERROR
 
 exit $EXIT_SUCCESS

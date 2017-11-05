@@ -9,11 +9,11 @@ Comment[fr]=Environnement de développement LaTeX
 Comment[de]=LaTeX Entwicklungsumgebung
 Keywords=LaTeX;TeX;editor;
 MimeType=text/x-tex;
-Name=Docker TeXstudio
 StartupNotify=false
 Terminal=false
 Type=Application
 
 # In order to work, those two properties have to be set!
+#Name=Docker TeXstudio
 #Icon=texstudio
 #Exec=dockertexstudio %F

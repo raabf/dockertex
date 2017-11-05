@@ -44,7 +44,7 @@ Whi='\e[0;37m';     BWhi='\e[1;37m';    UWhi='\e[4;37m';    IWhi='\e[0;97m';    
 
 function usage #(exit_code: Optional) 
 {
-echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}--system${RCol}] [[${Blu}--no-texstudio${RCol}]  ${Blu}--icon-prefix ${UGre}icons dir${RCol}] [${Blu}--app-prefix ${UGre}applications dir${RCol}] [${Blu}--bin-prefix ${UGre}bin dir${RCol}]
+echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}--menu-tag ${UGre}tagname${RCol}] [${Blu}--system${RCol}] [[${Blu}--no-texstudio${RCol}]  ${Blu}--icon-prefix ${UGre}icons dir${RCol}] [${Blu}--app-prefix ${UGre}applications dir${RCol}] [${Blu}--bin-prefix ${UGre}bin dir${RCol}]
        ${Yel}$SCRIPTNAME${RCol} [${Blu}-h|--help${RCol}]
 
     Installs sctipts and texstudio menu entry in user home or in the specifed directories.
@@ -52,6 +52,10 @@ echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}--system${RCol}] [[${Blu}--no-te
 ${BRed}OPTIONS:${RCol}
     ${Blu}-h, --help${RCol}
         Print this help and exit.
+
+    ${Blu}--menu-tag ${UGre}tagname${RCol}
+        When specified, it installs a menu entry, which starts texstudio
+        in the texstudio docker-container with tag ${UGre}tagname${RCol}.
 
     ${Blu}--system${RCol}
         Install the scripts system wide for multi-user environments.
@@ -91,6 +95,9 @@ while getopts "$optspec" OPTION ; do
             case "${OPTARG}" in
                 help)
                     usage $EXIT_SUCCESS
+                    ;;
+                menu-tag)
+                    menu_tag="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
                 system)
                     is_system=true
@@ -158,20 +165,25 @@ fi
 cp "$SCRIPTPATH/bin/dockertex.sh" \
     "$bin_prefix/dockertex" || exit $EXIT_ERROR
 
+desktop_file="$applications_prefix/dockertexstudio-$menu_tag.desktop" 
+
 if [ "$no_texstudio" = false ]; then
     cp "$SCRIPTPATH/bin/dockertexstudio.sh" \
         "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
 
-    # copy texstudio menu entry
-    cp --recursive --no-target-directory \
-        "$SCRIPTPATH/misc/icons/" \
-        "$icon_prefix" || exit $EXIT_ERROR
-    
-    cp "$SCRIPTPATH/misc/dockertexstudio.desktop" \
-        "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
-    
-    echo "Exec=$bin_prefix/dockertexstudio %F" >> "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
-    echo "Icon=texstudio" >> "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
+    if [ ! -z $menu_tag ]; then
+        # copy texstudio menu entry
+        cp --recursive --no-target-directory \
+            "$SCRIPTPATH/misc/icons/" \
+            "$icon_prefix" || exit $EXIT_ERROR
+        
+        cp "$SCRIPTPATH/misc/dockertexstudio.desktop" \
+            "$desktop_file" || exit $EXIT_ERROR
+        
+        echo "Name=Docker TexStudio ($menu_tag)" >> "$desktop_file" || exit $EXIT_ERROR
+        echo "Exec=$bin_prefix/dockertexstudio --tag $menu_tag %F" >> "$desktop_file" || exit $EXIT_ERROR
+        echo "Icon=texstudio" >> "$desktop_file" || exit $EXIT_ERROR
+    fi
 fi
 
 # set correct permissions
@@ -179,8 +191,10 @@ if [ "$is_system" = true ]; then
     chmod +rx "$bin_prefix/dockertex" || exit $EXIT_ERROR
     if [ "$no_texstudio" = false ]; then
         chmod +rx "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
-        chmod 644 "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR 
-        chmod --recursive u=rw,g=r,o=r,a+X $icon_prefix || exit $EXIT_ERROR 
+        if [ ! -z $menu_tag ]; then
+            chmod 644 "$desktop_file" || exit $EXIT_ERROR 
+            chmod --recursive u=rw,g=r,o=r,a+X $icon_prefix || exit $EXIT_ERROR 
+        fi
     fi
 else
     chmod u+rx "$bin_prefix/dockertex" || exit $EXIT_ERROR

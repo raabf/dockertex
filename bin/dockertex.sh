@@ -120,7 +120,7 @@ shift $(( OPTIND - 1 ))
 if (( $# < 1 )) ; then
  echo -e "${Red}At least one argument is required.${RCol}" >&2
  echo -e "" 
- usage $EXIT_ERROR
+ usage $EXIT_FAILURE
 fi
 
 
@@ -128,7 +128,7 @@ fi
 
 if [ "$image_tag" == "" ]; then
  echo -e "${Red}${Blu}-t, --tag${Red} was omitted and ${Yel}DOCKERTEX_DEFAULT_TAG${Red} is empty. Please specify a ${UGre}tagname${Red}.${RCol}" >&2
- exit $EXIT_ERROR
+ exit $EXIT_FAILURE
 fi
 
 
