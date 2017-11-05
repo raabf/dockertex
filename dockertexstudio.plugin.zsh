@@ -1,10 +1,12 @@
 #!/bin/zsh
 
 0=${(%):-%N}
-DOCKERTEX_HOME="${0:A:h}"
+DOCKERTEX_ROOT="${0:A:h}"
 
 dockertexlatex()
 {
-    "${DOCKERTEX_HOME}"/bin/dockertexlatex.sh ${@}
+    # `bash -c ...` manipulates $0 so that it contain `dockertexstudio`
+    # instead of `dockertexstudio.sh`
+    bash -c ". ${DOCKERTEX_ROOT}/bin/dockertexstudio.sh" dockertexstudio ${@}
 }    
 
