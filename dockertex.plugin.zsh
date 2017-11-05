@@ -1,3 +1,10 @@
+#!/bin/zsh
 
 0=${(%):-%N}
-source ${0:A:h}/dockertex.zsh
+DOCKERTEX_HOME="${0:A:h}"
+
+dockertex()
+{
+    "${DOCKERTEX_HOME}"/bin/dockertex.sh ${@}
+}    
+
