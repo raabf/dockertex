@@ -94,7 +94,7 @@ while getopts "$optspec" OPTION ; do
                     menu_tag="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
                 menu-volume)
-                    volumes="$volumes --volume=${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    volumes="$volumes --volume ${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
 				*)	
 				if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" == ":" ]; then

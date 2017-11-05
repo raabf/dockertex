@@ -106,7 +106,7 @@ while getopts "$optspec" OPTION ; do
                     menu_tag="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
                 menu-volume)
-                    volumes="$volumes --volume=${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    volumes="$volumes --volume ${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
                 system)
                     is_system=true
