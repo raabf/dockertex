@@ -56,7 +56,6 @@ ${BRed}OPTIONS:${RCol}
         launched by the menu entry. The syntax of ${UGre}mapping${RCol} is the same as 
         in ${Blu}docker run${RCol}. This option can be repeated.
 
-
     ${Blu}--icon-prefix ${UGre}icons dir${RCol}
         The script copies the texstudio icon to ${UGre}icons dir${RCol}.
         Defaults to $icon_prefix/.
