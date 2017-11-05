@@ -5,7 +5,7 @@
 ## Author:  Fabian Raab <fabian@raab.link>
 ## Dependencies: docker
 ## Creation Date: 2017-10-28
-## Last Edit: 2017-10-28
+## Last Edit: 2017-11-05
 ##############################################################
 
 
@@ -19,6 +19,7 @@ EXIT_BUG=10
 TEXSTUDIO_IMAGE_NAME="mytexstudio"
 
 image_tag="${DOCKERTEX_DEFAULT_TAG}"
+volumes=""
 
 ##### Colors #####
 RCol='\e[0m'    # Text Reset
@@ -38,7 +39,7 @@ Whi='\e[0;37m';     BWhi='\e[1;37m';    UWhi='\e[4;37m';    IWhi='\e[0;97m';    
 
 function usage #(exit_code: Optional) 
 {
-echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}-t|--tag ${UGre}tagname${RCol}] [${UGre}texstudio options${RCol}]
+echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}-t|--tag ${UGre}tagname${RCol}] [${Blu}-v|--volume ${UGre}mapping${RCol}]* [${UGre}texstudio options${RCol}]
        ${Yel}$SCRIPTNAME${RCol} [${Blu}-h|--help${RCol}]
 
     Launches the $TEXSTUDIO_IMAGE_NAME docker-container and adds the home directory
@@ -55,6 +56,11 @@ ${BRed}OPTIONS:${RCol}
         If this option is omitted, ${UGre}tagname${RCol} defaults to the 
         environment variable ${Yel}DOCKERTEX_DEFAULT_TAG${RCol}.
 
+    ${Blu}-v, --volume ${UGre}mapping${RCol}
+        Mounts an additional volume into the docker-container. The
+        syntax of ${UGre}mapping${RCol} is the same as in
+        ${Blu}docker run${RCol}. This option can be repeated.
+
 ${BRed}EXIT STATUS:${RCol}
     If everything is successfull the script will exit with $EXIT_SUCCESS.
     Failure exit statuses of the script itself are $EXIT_FAILURE, $EXIT_ERROR, and $EXIT_BUG.
@@ -68,7 +74,7 @@ ${BRed}EXIT STATUS:${RCol}
 ###### Parse Options ######
 
 # first ':' prevents getopts error messages
-optspec=':t:h-:'
+optspec=':t:v:h-:'
 
 while getopts "$optspec" OPTION ; do
 	case $OPTION in
@@ -80,9 +86,14 @@ while getopts "$optspec" OPTION ; do
                 tag)
                     image_tag="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
+                volume)
+                    volumes="$volumes --volume=${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    ;;
 				*)	
-				if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
-			        echo -e "${Red}Unknown option \"-$OPTARG\".${RCol}" >&2
+				if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" == ":" ]; then
+			        echo -e "${Red}Unknown option ${Blu}--$OPTARG${Red}.${RCol}" >&2
+                    echo -e "" 
+                    usage $EXIT_FAILURE
 				fi
 				;;
 			esac
@@ -93,14 +104,20 @@ while getopts "$optspec" OPTION ; do
         t)
             image_tag=$OPTARG
             ;;
+        v)
+            volumes="$volumes --volume=${OPTARG}"
+            ;;
 		\?)	
-			echo -e "${Red}Unknown option \"-$OPTARG\".${RCol}" >&2
+			echo -e "${Red}Unknown option ${Blu}-$OPTARG\"${Red}.${RCol}" >&2
+            echo -e "" 
 			usage $EXIT_ERROR
 			;;
-		:) 	echo -e "${Red}Option \"-$OPTARG\" needs an argument.${RCol}" >&2
+		:) 	echo -e "${Red}Option ${Blu}-$OPTARG${Red} needs an argument.${RCol}" >&2
+            echo -e "" 
 			usage $EXIT_ERROR
 			;;
 		*) 	echo -e "${Red}ERROR: This should not happen.${RCol}" >&2
+            echo -e "" 
 			usage $EXIT_BUG
 			;;
 	esac
@@ -133,7 +150,7 @@ docker run --rm \
     --user="$(id --user):$(id --group)" \
     -e DISPLAY=unix$DISPLAY \
     --volume=$HOME/.config/dockertexstudio:/home/.config/texstudio \
-    --volume=$HOME/:$HOME/ \
+    --volume=$HOME/:$HOME/ $volumes \
     -e HOME=/home/ \
     --name=texstudio --workdir=/home/ \
     $TEXSTUDIO_IMAGE_NAME:$image_tag texstudio "$@"

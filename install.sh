@@ -5,7 +5,7 @@
 ## Author:  Fabian Raab <fabian@raab.link>
 ## Dependencies: docker
 ## Creation Date: 2017-11-02
-## Last Edit: 2017-11-02
+## Last Edit: 2017-11-05
 ##############################################################
 
 
@@ -25,6 +25,7 @@ no_texstudio=false
 system_icon_prefix="/usr/local/share/icons"
 system_applications_prefix="/usr/local/share/applications"
 system_bin_prefix="/usr/local/bin"
+volumes=""
 
 ##### Colors #####
 RCol='\e[0m'    # Text Reset
@@ -44,7 +45,7 @@ Whi='\e[0;37m';     BWhi='\e[1;37m';    UWhi='\e[4;37m';    IWhi='\e[0;97m';    
 
 function usage #(exit_code: Optional) 
 {
-echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}--menu-tag ${UGre}tagname${RCol}] [${Blu}--system${RCol}] [[${Blu}--no-texstudio${RCol}]  ${Blu}--icon-prefix ${UGre}icons dir${RCol}] [${Blu}--app-prefix ${UGre}applications dir${RCol}] [${Blu}--bin-prefix ${UGre}bin dir${RCol}]
+echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}--menu-tag ${UGre}tagname${RCol}] [${Blu}--menu-volume ${UGre}mapping${RCol}]* [${Blu}--system${RCol}] [${Blu}--no-texstudio${RCol}]  ${Blu}--icon-prefix ${UGre}icons dir${RCol}] [${Blu}--app-prefix ${UGre}applications dir${RCol}] [${Blu}--bin-prefix ${UGre}bin dir${RCol}]
        ${Yel}$SCRIPTNAME${RCol} [${Blu}-h|--help${RCol}]
 
     Installs sctipts and texstudio menu entry in user home or in the specifed directories.
@@ -56,6 +57,11 @@ ${BRed}OPTIONS:${RCol}
     ${Blu}--menu-tag ${UGre}tagname${RCol}
         When specified, it installs a menu entry, which starts texstudio
         in the texstudio docker-container with tag ${UGre}tagname${RCol}.
+
+    ${Blu}--menu-volume ${UGre}mapping${RCol}
+        Mounts an additional volume into the docker-container which is
+        launched by the menu entry. The syntax of ${UGre}mapping${RCol} is the same as 
+        in ${Blu}docker run${RCol}. This option can be repeated.
 
     ${Blu}--system${RCol}
         Install the scripts system wide for multi-user environments.
@@ -99,6 +105,9 @@ while getopts "$optspec" OPTION ; do
                 menu-tag)
                     menu_tag="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
+                menu-volume)
+                    volumes="$volumes --volume=${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    ;;
                 system)
                     is_system=true
                     ;;
@@ -115,25 +124,30 @@ while getopts "$optspec" OPTION ; do
                     arg_bin_prefix="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
                 *)
-                if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
-                    echo -e "${Red}Unknown option \"-$OPTARG\".${RCol}" >&2
-                fi
+				if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" == ":" ]; then
+			        echo -e "${Red}Unknown option ${Blu}--$OPTARG${Red}.${RCol}" >&2
+                    echo -e "" 
+                    usage $EXIT_FAILURE
+				fi
                 ;;
             esac
             ;;
         h) 
             usage $EXIT_SUCCESS
             ;;
-        \?) 
-            echo -e "${Red}Unknown option \"-$OPTARG\".${RCol}" >&2
-            usage $EXIT_ERROR
-            ;;
-        :)  echo -e "${Red}Option \"-$OPTARG\" needs an argument.${RCol}" >&2
-            usage $EXIT_ERROR
-            ;;
-        *)  echo -e "${Red}ERROR: This should not happen.${RCol}" >&2
-            usage $EXIT_BUG
-            ;;
+		\?)	
+			echo -e "${Red}Unknown option ${Blu}-$OPTARG\"${Red}.${RCol}" >&2
+            echo -e "" 
+			usage $EXIT_ERROR
+			;;
+		:) 	echo -e "${Red}Option ${Blu}-$OPTARG${Red} needs an argument.${RCol}" >&2
+            echo -e "" 
+			usage $EXIT_ERROR
+			;;
+		*) 	echo -e "${Red}ERROR: This should not happen.${RCol}" >&2
+            echo -e "" 
+			usage $EXIT_BUG
+			;;
     esac
 done
 
@@ -181,7 +195,7 @@ if [ "$no_texstudio" = false ]; then
             "$desktop_file" || exit $EXIT_ERROR
         
         echo "Name=Docker TexStudio ($menu_tag)" >> "$desktop_file" || exit $EXIT_ERROR
-        echo "Exec=$bin_prefix/dockertexstudio --tag $menu_tag %F" >> "$desktop_file" || exit $EXIT_ERROR
+        echo "Exec=$bin_prefix/dockertexstudio --tag $menu_tag $volumes %F" >> "$desktop_file" || exit $EXIT_ERROR
         #echo "Icon=texstudio" >> "$desktop_file" || exit $EXIT_ERROR
         echo "Icon=$icon_prefix/hicolor/scalable/apps/texstudio.svg" >> "$desktop_file" || exit $EXIT_ERROR
     fi

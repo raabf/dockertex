@@ -88,8 +88,10 @@ while getopts "$optspec" OPTION ; do
                     image_tag="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
 				*)	
-				if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
-			        echo -e "${Red}Unknown option \"-$OPTARG\".${RCol}" >&2
+				if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" == ":" ]; then
+			        echo -e "${Red}Unknown option ${Blu}--$OPTARG${Red}.${RCol}" >&2
+                    echo -e "" 
+                    usage $EXIT_FAILURE
 				fi
 				;;
 			esac
@@ -101,13 +103,16 @@ while getopts "$optspec" OPTION ; do
             image_tag=$OPTARG
             ;;
 		\?)	
-			echo -e "${Red}Unknown option \"-$OPTARG\".${RCol}" >&2
+			echo -e "${Red}Unknown option ${Blu}-$OPTARG\"${Red}.${RCol}" >&2
+            echo -e "" 
 			usage $EXIT_ERROR
 			;;
-		:) 	echo -e "${Red}Option \"-$OPTARG\" needs an argument.${RCol}" >&2
+		:) 	echo -e "${Red}Option ${Blu}-$OPTARG${Red} needs an argument.${RCol}" >&2
+            echo -e "" 
 			usage $EXIT_ERROR
 			;;
 		*) 	echo -e "${Red}ERROR: This should not happen.${RCol}" >&2
+            echo -e "" 
 			usage $EXIT_BUG
 			;;
 	esac
