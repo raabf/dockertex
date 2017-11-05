@@ -133,6 +133,7 @@ chmod a-x "$desktop_file" || exit $EXIT_ERROR
 
 echo "Name=Docker TexStudio ($menu_tag)" >> "$desktop_file" || exit $EXIT_ERROR
 echo "Exec=$SCRIPTPATH/bin/dockertexstudio.sh --tag $menu_tag %F" >> "$desktop_file" || exit $EXIT_ERROR
-echo "Icon=texstudio" >> "$desktop_file" || exit $EXIT_ERROR
+#echo "Icon=texstudio" >> "$desktop_file" || exit $EXIT_ERROR
+echo "Icon=$icon_prefix/hicolor/scalable/apps/texstudio.svg" >> "$desktop_file" || exit $EXIT_ERROR
 
 exit $EXIT_SUCCESS

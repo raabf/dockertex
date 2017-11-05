@@ -182,7 +182,8 @@ if [ "$no_texstudio" = false ]; then
         
         echo "Name=Docker TexStudio ($menu_tag)" >> "$desktop_file" || exit $EXIT_ERROR
         echo "Exec=$bin_prefix/dockertexstudio --tag $menu_tag %F" >> "$desktop_file" || exit $EXIT_ERROR
-        echo "Icon=texstudio" >> "$desktop_file" || exit $EXIT_ERROR
+        #echo "Icon=texstudio" >> "$desktop_file" || exit $EXIT_ERROR
+        echo "Icon=$icon_prefix/hicolor/scalable/apps/texstudio.svg" >> "$desktop_file" || exit $EXIT_ERROR
     fi
 fi
 
