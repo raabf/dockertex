@@ -63,9 +63,8 @@ ${BRed}OPTIONS:${RCol}
         The script copies the texstudio menu entry (.desktop) to 
         ${UGre}applications dir${RCol}.
         Defaults to $home_applications_prefix/ and $system_applications_prefix/ for ${Blu}--system${RCol}.
-    
     ${Blu}--bin-prefix ${UGre}bin dir${RCol}
-        The script copies the scripts to ${UGre}bin dir${RCol}. 
+        The script copies the scripts to ${UGre}bin dir${RCol}.
         Defaults to $home_bin_prefix/ and $system_bin_prefix/ for ${Blu}--system${RCol}.
 
     
@@ -73,7 +72,7 @@ ${BRed}EXIT STATUS:${RCol}
     If everything is successfull the script will exit with $EXIT_SUCCESS.
     Failure exit statuses are $EXIT_FAILURE, $EXIT_ERROR, and $EXIT_BUG.
 "
-	[[ $# -eq 1 ]] && exit $1 || exit $EXIT_FAILURE
+    [[ $# -eq 1 ]] && exit $1 || exit $EXIT_FAILURE
 }
 
 
@@ -83,15 +82,15 @@ ${BRed}EXIT STATUS:${RCol}
 optspec=':t:h-:'
 
 while getopts "$optspec" OPTION ; do
-	case $OPTION in
-		-)
-			case "${OPTARG}" in
-				help)
-					usage $EXIT_SUCCESS
-				    ;;
-				system)
-					is_system=true
-				    ;;
+    case $OPTION in
+        -)
+            case "${OPTARG}" in
+                help)
+                    usage $EXIT_SUCCESS
+                    ;;
+                system)
+                    is_system=true
+                    ;;
                 icon-prefix)
                     arg_icon_prefix="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
@@ -101,27 +100,27 @@ while getopts "$optspec" OPTION ; do
                 bin-prefix)
                     arg_bin_prefix="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
-				*)	
-				if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
-			        echo -e "${Red}Unknown option \"-$OPTARG\".${RCol}" >&2
-				fi
-				;;
-			esac
-			;;
+                *)
+                if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
+                    echo -e "${Red}Unknown option \"-$OPTARG\".${RCol}" >&2
+                fi
+                ;;
+            esac
+            ;;
         h) 
             usage $EXIT_SUCCESS
-			;;
-		\?)	
-			echo -e "${Red}Unknown option \"-$OPTARG\".${RCol}" >&2
-			usage $EXIT_ERROR
-			;;
-		:) 	echo -e "${Red}Option \"-$OPTARG\" needs an argument.${RCol}" >&2
-			usage $EXIT_ERROR
-			;;
-		*) 	echo -e "${Red}ERROR: This should not happen.${RCol}" >&2
-			usage $EXIT_BUG
-			;;
-	esac
+            ;;
+        \?) 
+            echo -e "${Red}Unknown option \"-$OPTARG\".${RCol}" >&2
+            usage $EXIT_ERROR
+            ;;
+        :)  echo -e "${Red}Option \"-$OPTARG\" needs an argument.${RCol}" >&2
+            usage $EXIT_ERROR
+            ;;
+        *)  echo -e "${Red}ERROR: This should not happen.${RCol}" >&2
+            usage $EXIT_BUG
+            ;;
+    esac
 done
 
 # jump over consumed arguments
@@ -168,13 +167,13 @@ echo "Icon=texstudio" >> "$applications_prefix/dockertexstudio.desktop" || exit 
 
 # set correct permissions
 if [ "$is_system" = true ]; then
-    chmod +rx "$bin_prefix/dockertex" || exit $EXIT_ERROR 
-    chmod +rx "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR 
+    chmod +rx "$bin_prefix/dockertex" || exit $EXIT_ERROR
+    chmod +rx "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
     chmod 644 "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR 
     chmod --recursive u=rw,g=r,o=r,a+X $icon_prefix || exit $EXIT_ERROR 
 else
-    chmod u+rx "$bin_prefix/dockertex" || exit $EXIT_ERROR 
-    chmod u+rx "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR 
+    chmod u+rx "$bin_prefix/dockertex" || exit $EXIT_ERROR
+    chmod u+rx "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
 fi
 
 exit $EXIT_SUCCESS
