@@ -55,6 +55,8 @@ ${BRed}OPTIONS:${RCol}
         Mounts an additional volume into the docker-container which is
         launched by the menu entry. The syntax of ${UGre}mapping${RCol} is the same as 
         in ${Blu}docker run${RCol}. This option can be repeated.
+        '=' can be used as an alternative for the ':' sperator (intended as
+        workaround for a zplug which prevents the usage of ':' in hooks). 
 
     ${Blu}--icon-prefix ${UGre}icons dir${RCol}
         The script copies the texstudio icon to ${UGre}icons dir${RCol}.
@@ -94,7 +96,9 @@ while getopts "$optspec" OPTION ; do
                     menu_tag="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
                 menu-volume)
-                    volumes="$volumes --volume ${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    # '=' is an alternative seperator for ':' (workaround for zplug hook bug)
+                    tmp="$(echo "${!OPTIND}" | tr = :)"
+                    volumes="$volumes --volume ${tmp}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
 				*)	
 				if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" == ":" ]; then
