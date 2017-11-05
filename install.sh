@@ -21,6 +21,7 @@ home_applications_prefix="$HOME/.local/share/applications"
 home_bin_prefix="$HOME/.local/bin"
 
 is_system=false
+no_texstudio=false
 system_icon_prefix="/usr/local/share/icons"
 system_applications_prefix="/usr/local/share/applications"
 system_bin_prefix="/usr/local/bin"
@@ -43,7 +44,7 @@ Whi='\e[0;37m';     BWhi='\e[1;37m';    UWhi='\e[4;37m';    IWhi='\e[0;97m';    
 
 function usage #(exit_code: Optional) 
 {
-echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}--system${RCol}] [${Blu}--icon-prefix ${UGre}icons dir${RCol}] [${Blu}--app-prefix ${UGre}applications dir${RCol}] [${Blu}--bin-prefix ${UGre}bin dir${RCol}]
+echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}--system${RCol}] [[${Blu}--no-texstudio${RCol}]  ${Blu}--icon-prefix ${UGre}icons dir${RCol}] [${Blu}--app-prefix ${UGre}applications dir${RCol}] [${Blu}--bin-prefix ${UGre}bin dir${RCol}]
        ${Yel}$SCRIPTNAME${RCol} [${Blu}-h|--help${RCol}]
 
     Installs sctipts and texstudio menu entry in user home or in the specifed directories.
@@ -54,6 +55,9 @@ ${BRed}OPTIONS:${RCol}
 
     ${Blu}--system${RCol}
         Install the scripts system wide for multi-user environments.
+
+    ${Blu}--no-texstudio${RCol}
+        Does not install texstudio entries.
 
     ${Blu}--icon-prefix ${UGre}icons dir${RCol}
         The script copies the texstudio icon to ${UGre}icons dir${RCol}.
@@ -90,6 +94,9 @@ while getopts "$optspec" OPTION ; do
                     ;;
                 system)
                     is_system=true
+                    ;;
+                no-texstudio)
+                    no_texstudio=true
                     ;;
                 icon-prefix)
                     arg_icon_prefix="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
@@ -151,29 +158,35 @@ fi
 cp "$SCRIPTPATH/bin/dockertex.sh" \
     "$bin_prefix/dockertex" || exit $EXIT_ERROR
 
-cp "$SCRIPTPATH/bin/dockertexstudio.sh" \
-    "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
+if [ "$no_texstudio" = false ]; then
+    cp "$SCRIPTPATH/bin/dockertexstudio.sh" \
+        "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
 
-# copy texstudio menu entry
-cp --recursive --no-target-directory \
-    "$SCRIPTPATH/misc/icons/" \
-    "$icon_prefix" || exit $EXIT_ERROR
-
-cp "$SCRIPTPATH/misc/dockertexstudio.desktop" \
-    "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
-
-echo "Exec=$bin_prefix/dockertexstudio %F" >> "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
-echo "Icon=texstudio" >> "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
+    # copy texstudio menu entry
+    cp --recursive --no-target-directory \
+        "$SCRIPTPATH/misc/icons/" \
+        "$icon_prefix" || exit $EXIT_ERROR
+    
+    cp "$SCRIPTPATH/misc/dockertexstudio.desktop" \
+        "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
+    
+    echo "Exec=$bin_prefix/dockertexstudio %F" >> "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
+    echo "Icon=texstudio" >> "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR
+fi
 
 # set correct permissions
 if [ "$is_system" = true ]; then
     chmod +rx "$bin_prefix/dockertex" || exit $EXIT_ERROR
-    chmod +rx "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
-    chmod 644 "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR 
-    chmod --recursive u=rw,g=r,o=r,a+X $icon_prefix || exit $EXIT_ERROR 
+    if [ "$no_texstudio" = false ]; then
+        chmod +rx "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
+        chmod 644 "$applications_prefix/dockertexstudio.desktop" || exit $EXIT_ERROR 
+        chmod --recursive u=rw,g=r,o=r,a+X $icon_prefix || exit $EXIT_ERROR 
+    fi
 else
     chmod u+rx "$bin_prefix/dockertex" || exit $EXIT_ERROR
-    chmod u+rx "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
+    if [ "$no_texstudio" = false ]; then
+        chmod u+rx "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
+    fi
 fi
 
 exit $EXIT_SUCCESS
