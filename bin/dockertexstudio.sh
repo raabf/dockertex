@@ -126,7 +126,7 @@ use the following command to obtain it:
 fi
 
 
-docker run --interactive --tty --rm \
+docker run --rm \
     --cap-drop=all \
     --net=host \
     --volume=/tmp/.X11-unix:/tmp/.X11-unix \
