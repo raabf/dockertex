@@ -13,7 +13,7 @@ RUN apt-get remove --quiet --yes "texlive-*-doc"
 # install some common tools used with latex
 RUN apt-get install --quiet --yes \
     wget biber \
-    python-pygments gnuplot inkscape \
+    python-pygments gnuplot inkscape pandoc \
     make git && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
