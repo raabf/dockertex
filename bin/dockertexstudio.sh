@@ -138,7 +138,7 @@ fi
 if ! docker inspect --type=image $TEXSTUDIO_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
     echo -e "${Red}Docker image ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${Red} is locally not available. Please 
 use the following command to obtain it:
-        ${Blu}docker pull ${Gre}$LATEX_IMAGE_NAME:$image_tag${RCol}" >&2
+        ${Blu}docker pull ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${RCol}" >&2
     exit $EXIT_FAILURE
 fi
 

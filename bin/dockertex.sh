@@ -60,7 +60,7 @@ ${BRed}OPTIONS:${RCol}
 
 ${BRed}EXAMPLES:${RCol}
     ${Yel}$SCRIPTNAME${RCol} ${Blu}--tag ${Gre}texlive2016${RCol} ${Gre}make all${RCol}
-    ${Yel}$SCRIPTNAME${RCol} ${Gre}pdftex document.tex${RCol}
+    ${Yel}$SCRIPTNAME${RCol} ${Gre}pdflatex document.tex${RCol}
     
 ${BRed}EXIT STATUS:${RCol}
     If everything is successfull the script will exit with $EXIT_SUCCESS.

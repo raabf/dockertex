@@ -1,4 +1,5 @@
 FROM debian:stretch
+# texlive 2016
 
 ENV DEBIAN_FRONTEND noninteractive
 
