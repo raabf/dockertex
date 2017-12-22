@@ -22,10 +22,18 @@ home_bin_prefix="$HOME/.local/bin"
 
 is_system=false
 no_texstudio=false
+force_download=false
 system_icon_prefix="/usr/local/share/icons"
 system_applications_prefix="/usr/local/share/applications"
 system_bin_prefix="/usr/local/bin"
 volumes=""
+
+DOCKERTEX_SH_URL="https://gitlab.com/raabf/dockertex/raw/master/bin/dockertex.sh"
+DOCKERTEXSTUDIO_SH_URL="https://gitlab.com/raabf/dockertex/raw/master/bin/dockertexstudio.sh"
+
+DOCKERTEXSTUDIO_DESKTOP_URL="https://gitlab.com/raabf/dockertex/raw/master/misc/dockertexstudio.desktop"
+DOCKERTEXSTUDIO_SVG_URL="https://gitlab.com/raabf/dockertex/raw/master/misc/icons/hicolor/scalable/apps/texstudio.svg"
+
 
 ##### Colors #####
 RCol='\e[0m'    # Text Reset
@@ -64,7 +72,13 @@ ${BRed}OPTIONS:${RCol}
         in ${Blu}docker run${RCol}. This option can be repeated.
 
     ${Blu}--system${RCol}
-        Install the scripts system wide for multi-user environments.
+        Install the scripts system wide for multi-user environments. Default is in the
+        home directory of the current user.
+
+    ${Blu}--download${RCol}
+        Installer will download required files instead using the files of the local
+        reposity clone. Every file which do not exist locally will be automatically
+        downloaded.
 
     ${Blu}--no-texstudio${RCol}
         Does not install texstudio entries.
@@ -90,6 +104,23 @@ ${BRed}EXIT STATUS:${RCol}
 }
 
 
+function copy_or_download # src, dst, url
+{
+    src="$1"
+    dst="$2"
+    url="$3"
+    
+    mkdir --parents "$( dirname "$dst" )"
+
+    if [ "$force_download" = false ] && [ -f "$src" ]; then
+        echo "copy $src -> $dst"
+        cp "$src" "$dst" || exit $EXIT_ERROR
+    else
+        wget --no-verbose --output-document="$dst" "$url" || exit $EXIT_FAILURE
+    fi
+}
+
+
 ###### Parse Options ######
 
 # first ':' prevents getopts error messages
@@ -111,6 +142,9 @@ while getopts "$optspec" OPTION ; do
                 system)
                     is_system=true
                     ;;
+                download)
+                    force_download=true
+                    ;;
                 no-texstudio)
                     no_texstudio=true
                     ;;
@@ -124,35 +158,36 @@ while getopts "$optspec" OPTION ; do
                     arg_bin_prefix="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
                 *)
-				if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" == ":" ]; then
-			        echo -e "${Red}Unknown option ${Blu}--$OPTARG${Red}.${RCol}" >&2
+                if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" == ":" ]; then
+                    echo -e "${Red}Unknown option ${Blu}--$OPTARG${Red}.${RCol}" >&2
                     echo -e "" 
                     usage $EXIT_FAILURE
-				fi
+                fi
                 ;;
             esac
             ;;
         h) 
             usage $EXIT_SUCCESS
             ;;
-		\?)	
-			echo -e "${Red}Unknown option ${Blu}-$OPTARG\"${Red}.${RCol}" >&2
+        \?) 
+            echo -e "${Red}Unknown option ${Blu}-$OPTARG\"${Red}.${RCol}" >&2
             echo -e "" 
-			usage $EXIT_ERROR
-			;;
-		:) 	echo -e "${Red}Option ${Blu}-$OPTARG${Red} needs an argument.${RCol}" >&2
+            usage $EXIT_ERROR
+            ;;
+        :)  echo -e "${Red}Option ${Blu}-$OPTARG${Red} needs an argument.${RCol}" >&2
             echo -e "" 
-			usage $EXIT_ERROR
-			;;
-		*) 	echo -e "${Red}ERROR: This should not happen.${RCol}" >&2
+            usage $EXIT_ERROR
+            ;;
+        *)  echo -e "${Red}ERROR: This should not happen.${RCol}" >&2
             echo -e "" 
-			usage $EXIT_BUG
-			;;
+            usage $EXIT_BUG
+            ;;
     esac
 done
 
 # jump over consumed arguments
 shift $(( OPTIND - 1 ))
+
 
 ####### Commands ######
 
@@ -176,23 +211,28 @@ else
 fi
 
 # copy sctipts
-cp "$SCRIPTPATH/bin/dockertex.sh" \
-    "$bin_prefix/dockertex" || exit $EXIT_ERROR
+copy_or_download "$SCRIPTPATH/bin/dockertex.sh" \
+    "$bin_prefix/dockertex" "$DOCKERTEX_SH_URL"
 
 desktop_file="$applications_prefix/dockertexstudio-$menu_tag.desktop" 
 
 if [ "$no_texstudio" = false ]; then
-    cp "$SCRIPTPATH/bin/dockertexstudio.sh" \
-        "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
+    copy_or_download "$SCRIPTPATH/bin/dockertexstudio.sh" \
+        "$bin_prefix/dockertexstudio" "$DOCKERTEXSTUDIO_SH_URL"
 
     if [ ! -z $menu_tag ]; then
         # copy texstudio menu entry
-        cp --recursive --no-target-directory \
-            "$SCRIPTPATH/misc/icons/" \
-            "$icon_prefix" || exit $EXIT_ERROR
+
+        copy_or_download "$SCRIPTPATH/misc/icons/hicolor/scalable/apps/texstudio.svg" \
+            "$icon_prefix/hicolor/scalable/apps/texstudio.svg" "$DOCKERTEXSTUDIO_SVG_URL"
+        # since the above is scalable and we link to the svg directly in the
+        # desktop file, a single icon is currently sufficient
+        #cp --recursive --no-target-directory \
+        #    "$SCRIPTPATH/misc/icons/" \
+        #    "$icon_prefix" || exit $EXIT_ERROR
         
-        cp "$SCRIPTPATH/misc/dockertexstudio.desktop" \
-            "$desktop_file" || exit $EXIT_ERROR
+        copy_or_download "$SCRIPTPATH/misc/dockertexstudio.desktop" \
+            "$desktop_file" "$DOCKERTEXSTUDIO_DESKTOP_URL"
         
         echo "Name=Docker TexStudio ($menu_tag)" >> "$desktop_file" || exit $EXIT_ERROR
         echo "Exec=$bin_prefix/dockertexstudio --tag $menu_tag $volumes %F" >> "$desktop_file" || exit $EXIT_ERROR
@@ -203,12 +243,12 @@ fi
 
 # set correct permissions
 if [ "$is_system" = true ]; then
-    chmod +rx "$bin_prefix/dockertex" || exit $EXIT_ERROR
+    chmod a+rx "$bin_prefix/dockertex" || exit $EXIT_ERROR
     if [ "$no_texstudio" = false ]; then
-        chmod +rx "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
+        chmod a+rx "$bin_prefix/dockertexstudio" || exit $EXIT_ERROR
         if [ ! -z $menu_tag ]; then
             chmod 644 "$desktop_file" || exit $EXIT_ERROR 
-            chmod --recursive u=rw,g=r,o=r,a+X $icon_prefix || exit $EXIT_ERROR 
+            chmod --recursive u=w,a+rX $icon_prefix || exit $EXIT_ERROR 
         fi
     fi
 else
