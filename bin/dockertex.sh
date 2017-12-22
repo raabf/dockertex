@@ -68,7 +68,7 @@ ${BRed}EXIT STATUS:${RCol}
     When ${Blu}docker run${RCol} is executed it returns whatever this command
     returns. See docker run manpage for further information.
 "
-	[[ $# -eq 1 ]] && exit $1 || exit $EXIT_FAILURE
+    [[ $# -eq 1 ]] && exit $1 || exit $EXIT_FAILURE
 }
 
 
@@ -78,44 +78,44 @@ ${BRed}EXIT STATUS:${RCol}
 optspec=':t:h-:'
 
 while getopts "$optspec" OPTION ; do
-	case $OPTION in
-		-)
-			case "${OPTARG}" in
-				help)
-					usage $EXIT_SUCCESS
-				    ;;
+    case $OPTION in
+        -)
+            case "${OPTARG}" in
+                help)
+                    usage $EXIT_SUCCESS
+                    ;;
                 tag)
                     image_tag="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
-				*)	
-				if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" == ":" ]; then
-			        echo -e "${Red}Unknown option ${Blu}--$OPTARG${Red}.${RCol}" >&2
+                *)  
+                if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" == ":" ]; then
+                    echo -e "${Red}Unknown option ${Blu}--$OPTARG${Red}.${RCol}" >&2
                     echo -e "" 
                     usage $EXIT_FAILURE
-				fi
-				;;
-			esac
-			;;
+                fi
+                ;;
+            esac
+            ;;
         h) 
             usage $EXIT_SUCCESS
-			;;
+            ;;
         t)
             image_tag=$OPTARG
             ;;
-		\?)	
-			echo -e "${Red}Unknown option ${Blu}-$OPTARG\"${Red}.${RCol}" >&2
+        \?) 
+            echo -e "${Red}Unknown option ${Blu}-$OPTARG\"${Red}.${RCol}" >&2
             echo -e "" 
-			usage $EXIT_ERROR
-			;;
-		:) 	echo -e "${Red}Option ${Blu}-$OPTARG${Red} needs an argument.${RCol}" >&2
+            usage $EXIT_ERROR
+            ;;
+        :)  echo -e "${Red}Option ${Blu}-$OPTARG${Red} needs an argument.${RCol}" >&2
             echo -e "" 
-			usage $EXIT_ERROR
-			;;
-		*) 	echo -e "${Red}ERROR: This should not happen.${RCol}" >&2
+            usage $EXIT_ERROR
+            ;;
+        *)  echo -e "${Red}ERROR: This should not happen.${RCol}" >&2
             echo -e "" 
-			usage $EXIT_BUG
-			;;
-	esac
+            usage $EXIT_BUG
+            ;;
+    esac
 done
 
 # jump over consumed arguments
@@ -159,5 +159,3 @@ docker run --rm --interactive \
     -e HOME="/home" \
     $image_name:$image_tag "$@" || exit $?
 
-
-exit $EXIT_SUCCESS
