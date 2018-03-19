@@ -17,6 +17,7 @@ EXIT_ERROR=2
 EXIT_BUG=10
 
 TEXSTUDIO_IMAGE_NAME="mytexstudio"
+TEXSTUDIO_CONFIG_PATH="$HOME/.config/dockertexstudio"
 
 image_tag="${DOCKERTEX_DEFAULT_TAG}"
 volumes=""
@@ -43,8 +44,9 @@ echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}-t|--tag ${UGre}tagname${RCol}] 
        ${Yel}$SCRIPTNAME${RCol} [${Blu}-h|--help${RCol}]
 
     Launches the $TEXSTUDIO_IMAGE_NAME docker-container and adds the home directory
-    as a volume to ${Yel}/home/host${RCol} in the docker container. Then texstudio is
+    as a volume to ${Yel}/home/\$HOME${RCol} in the docker container. Then texstudio is
     started in the container with ${UGre}texstudio options${RCol} as parameter.
+    TexStudios cofiguration is stored at ${Yel}$TEXSTUDIO_CONFIG_PATH${RCol}
     Afterwards, the container is removed.
 
 ${BRed}OPTIONS:${RCol}
@@ -149,7 +151,7 @@ docker run --rm \
     --volume=/tmp/.X11-unix:/tmp/.X11-unix \
     --user="$(id --user):$(id --group)" \
     -e DISPLAY=unix$DISPLAY \
-    --volume=$HOME/.config/dockertexstudio:/home/.config/texstudio \
+    --volume=$TEXSTUDIO_CONFIG_PATH:/home/.config/texstudio \
     --volume=$HOME/:$HOME/ $volumes \
     -e HOME=/home/ \
     --name=texstudio --workdir=/home/ \
