@@ -1,4 +1,4 @@
-FROM mylatex:jessie
+FROM raabf/latex-versions:jessie
 
 ENV DEBIAN_FRONTEND noninteractive
 

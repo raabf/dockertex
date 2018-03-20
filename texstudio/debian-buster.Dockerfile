@@ -1,4 +1,4 @@
-FROM mylatex:buster
+FROM raabf/latex-versions:buster
 
 ENV DEBIAN_FRONTEND noninteractive
 

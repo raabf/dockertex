@@ -1,4 +1,4 @@
-FROM mylatex:stretch
+FROM raabf/latex-versions:stretch
 
 ENV DEBIAN_FRONTEND noninteractive
 

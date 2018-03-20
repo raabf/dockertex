@@ -1,4 +1,4 @@
-FROM mylatex:wheezy
+FROM raabf/latex-versions:wheezy
 
 ENV DEBIAN_FRONTEND noninteractive
 

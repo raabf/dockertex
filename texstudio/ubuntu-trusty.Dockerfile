@@ -1,4 +1,4 @@
-FROM mylatex:trusty
+FROM raabf/latex-versions:trusty
 
 ENV DEBIAN_FRONTEND noninteractive
 

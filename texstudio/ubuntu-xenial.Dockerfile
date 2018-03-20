@@ -1,4 +1,4 @@
-FROM mylatex:xenial
+FROM raabf/latex-versions:xenial
 
 ENV DEBIAN_FRONTEND noninteractive
 
