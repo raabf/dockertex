@@ -11,7 +11,7 @@
 |---------------|---------------|
 | ![docker stars](https://img.shields.io/docker/stars/raabf/latex-versions.svg) ![docker pulls](https://img.shields.io/docker/pulls/raabf/latex-versions.svg) ![docker stars](https://img.shields.io/docker/build/raabf/latex-versions.svg) | ![docker stars](https://img.shields.io/docker/stars/raabf/texstudio-versions.svg) ![docker pulls](https://img.shields.io/docker/pulls/raabf/texstudio-versions.svg) ![docker stars](https://img.shields.io/docker/build/raabf/texstudio-versions.svg)|
 
-Both images are automatically rebuild on Dockerhub when the Debian or Ubuntu base images change (they do on avarage each once per month).raabf/latex-versions.svg) !
+Both images are automatically rebuild on Dockerhub when the Debian or Ubuntu base images change (they do on avarage each once per month).
 
 ## 🏆 Features
 
