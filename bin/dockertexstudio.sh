@@ -16,7 +16,7 @@ EXIT_FAILURE=1
 EXIT_ERROR=2
 EXIT_BUG=10
 
-TEXSTUDIO_IMAGE_NAME="mytexstudio"
+TEXSTUDIO_IMAGE_NAME="raabf/texstudio-versions"
 TEXSTUDIO_CONFIG_PATH="$HOME/.config/dockertexstudio"
 
 image_tag="${DOCKERTEX_DEFAULT_TAG}"
@@ -40,12 +40,12 @@ Whi='\e[0;37m';     BWhi='\e[1;37m';    UWhi='\e[4;37m';    IWhi='\e[0;97m';    
 
 function usage #(exit_code: Optional) 
 {
-echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}-t|--tag ${UGre}tagname${RCol}] [${Blu}-v|--volume ${UGre}mapping${RCol}]* [${UGre}texstudio options${RCol}]
+echo -e "${BRed}Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}-t|--tag ${UGre}tagname${RCol}] [${Blu}-v|--volume ${UGre}mapping${RCol}]* [${UGre}texstudio options${RCol}]
        ${Yel}$SCRIPTNAME${RCol} [${Blu}-h|--help${RCol}]
 
-    Launches the $TEXSTUDIO_IMAGE_NAME docker-container and adds the home directory
-    as a volume to ${Yel}/home/\$HOME${RCol} in the docker container. Then texstudio is
-    started in the container with ${UGre}texstudio options${RCol} as parameter.
+    Launches the $TEXSTUDIO_IMAGE_NAME docker-container and adds the home
+    directory as a volume to ${Yel}/home/\$HOME${RCol} in the docker container. Then 
+    texstudio is started in the container with ${UGre}texstudio options${RCol} as parameter.
     TexStudios cofiguration is stored at ${Yel}$TEXSTUDIO_CONFIG_PATH${RCol}
     Afterwards, the container is removed.
 
@@ -56,17 +56,17 @@ ${BRed}OPTIONS:${RCol}
     ${Blu}-t, --tag ${UGre}tagname${RCol}
         The latex docker container with tag ${UGre}tagname${RCol} will be used.
         If this option is omitted, ${UGre}tagname${RCol} defaults to the 
-        environment variable ${Yel}DOCKERTEX_DEFAULT_TAG${RCol}.
+        environment variable ${Blu}DOCKERTEX_DEFAULT_TAG${RCol}.
 
     ${Blu}-v, --volume ${UGre}mapping${RCol}
         Mounts an additional volume into the docker-container. The
-        syntax of ${UGre}mapping${RCol} is the same as in
-        ${Blu}docker run${RCol}. This option can be repeated.
+        syntax of ${UGre}mapping${RCol} is the same as in ${Yel}docker run${RCol}. 
+        This option can be repeated.
 
 ${BRed}EXIT STATUS:${RCol}
     If everything is successfull the script will exit with $EXIT_SUCCESS.
     Failure exit statuses of the script itself are $EXIT_FAILURE, $EXIT_ERROR, and $EXIT_BUG.
-    When ${Blu}docker run${RCol} is executed it returns whatever this command
+    When ${Yel}docker run${RCol} is executed it returns whatever this command
     returns. See docker run manpage for further information.
 "
 	[[ $# -eq 1 ]] && exit $1 || exit $EXIT_FAILURE

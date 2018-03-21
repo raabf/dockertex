@@ -17,8 +17,8 @@ EXIT_FAILURE=1
 EXIT_ERROR=2
 EXIT_BUG=10
 
-LATEX_IMAGE_NAME="mylatex"
-TEXSTUDIO_IMAGE_NAME="mytexstudio"
+LATEX_IMAGE_NAME="raabf/latex-versions"
+TEXSTUDIO_IMAGE_NAME="raabf/texstudio-versions"
 
 image_tag="${DOCKERTEX_DEFAULT_TAG}"
 
@@ -40,14 +40,14 @@ Whi='\e[0;37m';     BWhi='\e[1;37m';    UWhi='\e[4;37m';    IWhi='\e[0;97m';    
 
 function usage #(exit_code: Optional) 
 {
-echo -e "Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}-t|--tag ${UGre}tagname${RCol}] ${UGre}command${RCol}
+echo -e "${BRed}Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}-t|--tag ${UGre}tagname${RCol}] ${UGre}command${RCol}
        ${Yel}$SCRIPTNAME${RCol} [${Blu}-h|--help${RCol}]
 
-    Launches the $TEXSTUDIO_IMAGE_NAME, or if not available the $LATEX_IMAGE_NAME
-    docker-container and adds the current working directory as a
-    volume. Then ${UGre}command${RCol} is executed in the container
-    in the current working directory. Afterwards, the container is
-    removed.
+    Launches the $TEXSTUDIO_IMAGE_NAME – or if not available as
+    alternative the $LATEX_IMAGE_NAME docker-container – with the 
+    tag ${UGre}tagname${RCol} and adds the current working directory as a volume.
+    Then ${UGre}command${RCol} is executed in the container in the 
+    current working directory. Afterwards, the container is removed.
 
 ${BRed}OPTIONS:${RCol}
     ${Blu}-h, --help${RCol}
@@ -56,16 +56,17 @@ ${BRed}OPTIONS:${RCol}
     ${Blu}-t, --tag ${UGre}tagname${RCol}
         The latex docker container with tag ${UGre}tagname${RCol} will be used.
         If this option is omitted, ${UGre}tagname${RCol} defaults to the 
-        environment variable ${Yel}DOCKERTEX_DEFAULT_TAG${RCol}.
+        environment variable ${Blu}DOCKERTEX_DEFAULT_TAG${RCol}.
 
 ${BRed}EXAMPLES:${RCol}
     ${Yel}$SCRIPTNAME${RCol} ${Blu}--tag ${Gre}texlive2016${RCol} ${Gre}make all${RCol}
+    ${Yel}export${RCol} ${Blu}DOCKERTEX_DEFAULT_TAG${RCol}=${Gre}texlive2017${RCol}
     ${Yel}$SCRIPTNAME${RCol} ${Gre}pdflatex document.tex${RCol}
     
 ${BRed}EXIT STATUS:${RCol}
     If everything is successfull the script will exit with $EXIT_SUCCESS.
     Failure exit statuses of the script itself are $EXIT_FAILURE, $EXIT_ERROR, and $EXIT_BUG.
-    When ${Blu}docker run${RCol} is executed it returns whatever this command
+    When ${Yel}docker run${RCol} is executed it returns whatever this command
     returns. See docker run manpage for further information.
 "
     [[ $# -eq 1 ]] && exit $1 || exit $EXIT_FAILURE
@@ -143,9 +144,10 @@ else
     if docker inspect --type=image $LATEX_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
         image_name=$LATEX_IMAGE_NAME
     else
-        echo -e "${Red}Docker image ${Gre}$LATEX_IMAGE_NAME:$image_tag${Red} is locally not available. Please 
-use the following command to obtain it:
-        ${Blu}docker pull ${Gre}$LATEX_IMAGE_NAME:$image_tag${RCol}" >&2
+        echo -e "${Red}The requested docker image with tag ${Gre}$image_tag${Red} is locally not available.
+Please use one of the following commands to obtain it:
+        ${Blu}docker pull ${Gre}$LATEX_IMAGE_NAME:$image_tag${RCol}
+        ${Blu}docker pull ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${RCol}" >&2
         exit $EXIT_FAILURE
     fi
 fi
