@@ -13,6 +13,7 @@ RUN wget -O texstudio.deb "http://download.opensuse.org/repositories/home:/jsund
     (dpkg --install ./texstudio.deb || true) && \
     apt-get --fix-broken --yes --quiet install && \
     command -v texstudio >/dev/null 2>&1 && \
+    rm texstudio.deb && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
