@@ -1,14 +1,13 @@
 🐋📓 DockerTeX ➕ 🐋📽 DockerTeXstudio
 =====================================
 
-![docker automated](https://img.shields.io/docker/automated/raabf/latex-versions.svg) ![maintained](https://img.shields.io/maintenance/yes/2018.svg) [![licence](https://img.shields.io/github/license/raabf/dockertex.svg)](https://gitlab.com/raabf/dockertex/blob/master/LICENSE)
-
+![docker automated](https://img.shields.io/docker/automated/raabf/latex-versions.svg) ![maintained](https://img.shields.io/maintenance/yes/2018.svg) [![licence](https://img.shields.io/github/license/raabf/dockertex.svg)](https://gitlab.com/raabf/dockertex/blob/master/LICENSE) [![microbadger commit](https://images.microbadger.com/badges/commit/raabf/texstudio-versions.svg)](https://gitlab.com/raabf/dockertex/: "Repository")
 
 #### Dockerhub:
 
 | 📓[raabf/latex-versions](https://hub.docker.com/r/raabf/latex-versions) | 📽[raabf/texstudio-versions](https://hub.docker.com/r/raabf/texstudio-versions)|
 |---------------|---------------|
-| ![docker stars](https://img.shields.io/docker/stars/raabf/latex-versions.svg) ![docker pulls](https://img.shields.io/docker/pulls/raabf/latex-versions.svg) [![docker build](https://img.shields.io/docker/build/raabf/latex-versions.svg)](https://hub.docker.com/r/raabf/latex-versions/builds/) | ![docker stars](https://img.shields.io/docker/stars/raabf/texstudio-versions.svg) ![docker pulls](https://img.shields.io/docker/pulls/raabf/texstudio-versions.svg) [![docker build](https://img.shields.io/docker/build/raabf/texstudio-versions.svg)](https://hub.docker.com/r/raabf/texstudio-versions/builds/) |
+| ![docker stars](https://img.shields.io/docker/stars/raabf/latex-versions.svg) ![docker pulls](https://img.shields.io/docker/pulls/raabf/latex-versions.svg) | ![docker stars](https://img.shields.io/docker/stars/raabf/texstudio-versions.svg) ![docker pulls](https://img.shields.io/docker/pulls/raabf/texstudio-versions.svg) |
 
 Both images are automatically rebuilt on Dockerhub when the Debian or Ubuntu base images change (they do on average each once per month).
 
