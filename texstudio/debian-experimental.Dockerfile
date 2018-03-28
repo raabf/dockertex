@@ -20,7 +20,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # for the modern KDE Plasma look (configurable in texstudio options)
 # not available in experimental yet
-#RUN apt-get update && \
+RUN apt-get update
 #    apt-get install --quiet --yes kde-style-breeze
 
 COPY TEXSTUDIO_VERSION* ./
