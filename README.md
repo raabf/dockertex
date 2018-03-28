@@ -42,6 +42,11 @@ To specify your texlive version you can either use the texlive tag (texlive2012,
 |    v2018 | texlive2018 |  Debian | experimental| [![Latex Dockerfile](https://img.shields.io/badge/📓-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/debian-experimental.Dockerfile "Latex Dockerfile") [![microbadger](https://images.microbadger.com/badges/image/raabf/latex-versions:experimental.svg)](https://microbadger.com/images/raabf/latex-versions:experimental "Latex microbadger.com size and layer information")  [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-experimental.Dockerfile "TeXstudio Dockerfile") [![microbadger](https://images.microbadger.com/badges/image/raabf/texstudio-versions:experimental.svg)](https://microbadger.com/images/raabf/texstudio-versions:experimental "TeXstudio microbadger.com size and layer information") | in development; texstudio not working |
 
 
+#### TeXstudio buster/experimental
+
+The author of TeXstudio do not release a version for buster or experimental Debian. The version for stretch do not start in buster or experimental due to an unknown problem. Tell me if you have found a solution for that.
+
+
 ## 🖱 Usage
 
 Obviously docker must be installed on your system.
