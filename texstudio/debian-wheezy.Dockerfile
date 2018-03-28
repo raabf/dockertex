@@ -18,7 +18,7 @@ LABEL maintainer="Fabian Raab <fabian@raab.link>" \
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update 
+RUN apt-get update
 
 COPY TEXSTUDIO_VERSION* ./
 
@@ -31,7 +31,8 @@ RUN wget -O texstudio.deb "http://download.opensuse.org/repositories/home:/jsund
     command -v texstudio >/dev/null 2>&1 && \
     rm texstudio.deb && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/*
 
 VOLUME [ "/home/.config/texstudio" ]
 
