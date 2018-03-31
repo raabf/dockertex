@@ -155,7 +155,7 @@ fi
 
 docker run --rm --interactive \
     --user="$(id --user):$(id --group)" \
-    --name="latex" --net=none \
+    --name="latex_$image_tag" --net=none \
     --volume="$PWD":/home/workdir \
     --workdir="/home/workdir" \
     -e HOME="/home" \

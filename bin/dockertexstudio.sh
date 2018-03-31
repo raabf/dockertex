@@ -154,6 +154,6 @@ docker run --rm \
     --volume=$TEXSTUDIO_CONFIG_PATH:/home/.config/texstudio \
     --volume=$HOME/:$HOME/ $volumes \
     -e HOME=/home/ \
-    --name=texstudio --workdir=/home/ \
-    $TEXSTUDIO_IMAGE_NAME:$image_tag texstudio "$@"
+    --name=texstudio_$image_tag --workdir=/home/ \
+    $TEXSTUDIO_IMAGE_NAME:$image_tag texstudio "$@" || exit $?
 
