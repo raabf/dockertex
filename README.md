@@ -124,6 +124,7 @@ To install dockertex CLI, just add the repository to your plugin configuration  
 
 It should work also with any other plugin manager. If you have tested it with other plugin managers and if you want to extend this list please tell me at the [issues board](https://gitlab.com/raabf/dockertex/issues).
 
+
 ### ⛓ Automated script
 
 If you do not have zsh, you can install the dockertex CLI and the TeXstudio menu entries through an install script. 
@@ -187,7 +188,7 @@ The latex images are working well for automatically build your output PDF in a C
 
 #### GitLab CI
 
-First you have to register a [runner](https://docs.gitlab.com/runner/) at one of your servers with installed docker.  The only important thing ist that you choose `docker` as executor. The given image is just a dafault docker image which can be overwritten later in the config.
+First you have to register a [runner](https://docs.gitlab.com/runner/) at one of your servers with installed docker.  The only important thing is that you choose `docker` as executor. The given image is just a default docker image which can be overwritten later in the project config.
 
     sudo gitlab-runner register --url https://gitlab.com/ --executor "docker" --tag-list "docker, latex, dockertex" --docker-image "raabf/latex-versions:latest"
 
@@ -241,7 +242,7 @@ make_texlive2015:
     expire_in: 1 week
 ```
 
-In this example `thesis.pdf` is your output. The artifact section will upload the specified file at the CI’s Web-Interface and make it even available for viewing and download for you!
+In this example `thesis.pdf` is your output. The artifact section will upload the specified file at the CI’s Web-Interface and make it even available for viewing and downloading!
 
 ![GitLab CI Artifacts Download Page](misc/pictures/gitlab_ci_artifacts.jpg "GitLab CI Artifacts Download Page")
 
@@ -251,5 +252,5 @@ Did you test it with other CI systems and want to extend this list of examples? 
 
 ## 💡 Contributing
 
-This project aims to be a generalized latex environment for the majority of latex projects. 
+This project aims to be a generalized latex environment for the majority of latex projects.
 If something is missing or not working, then I’m happy for any contribution. You can find the [repository](https://gitlab.com/raabf/dockertex/) and [issues board](https://gitlab.com/raabf/dockertex/issues) at GitLab.
