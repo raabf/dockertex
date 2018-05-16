@@ -1,11 +1,11 @@
-FROM raabf/latex-versions:buster
+FROM raabf/latex-versions:bionic
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL maintainer="Fabian Raab <fabian@raab.link>" \
-	  texlive_version="2018" \
+	  texlive_version="2017" \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="dockertex-texstudio" \
       org.label-schema.description="🐋📽 TeXstudio including Latex with multiple texlive versions and proper command line tools" \
@@ -27,7 +27,7 @@ COPY TEXSTUDIO_VERSION* ./
 # install texstudio
 # (A newer version from the developer, since the version in the
 #  standard repository is quite old)
-RUN wget -O texstudio.deb "http://download.opensuse.org/repositories/home:/jsundermeyer/Debian_9.0/amd64/texstudio_$(head --lines=1 TEXSTUDIO_VERSION_QT5_DEBIAN9)_amd64.deb" && \
+RUN wget -O texstudio.deb "http://download.opensuse.org/repositories/home:/jsundermeyer/xUbuntu_18.04/amd64/texstudio_$(head --lines=1 TEXSTUDIO_VERSION_QT5)_amd64.deb" && \
     apt-get install --quiet --yes ./texstudio.deb && \
     command -v texstudio >/dev/null 2>&1 && \
     rm texstudio.deb && \

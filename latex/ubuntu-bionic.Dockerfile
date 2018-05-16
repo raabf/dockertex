@@ -1,12 +1,12 @@
-FROM debian:buster
-# texlive 2018 (may change since buster is in development)
+FROM ubuntu:bionic
+# texlive 2017
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL maintainer="Fabian Raab <fabian@raab.link>" \
-	    texlive_version="2018" \
+	    texlive_version="2017" \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="dockertex-latex" \
       org.label-schema.description="🐋📓 Latex with multiple texlive versions and proper command line tools 🎈 suitable for CI" \
