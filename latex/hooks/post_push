@@ -12,8 +12,8 @@ aliasmap[wheezy]="texlive2012"
 aliasmap[trusty]="texlive2013"
 aliasmap[jessie]="texlive2014"
 aliasmap[xenial]="texlive2015"
-aliasmap[stretch]="texlive2016"
-aliasmap[bionic]="texlive2017 latest"
+aliasmap[stretch]="texlive2016 latest"
+aliasmap[bionic]="texlive2017"
 aliasmap[buster]="texlive2018 testing"
 
 
