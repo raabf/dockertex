@@ -8,5 +8,6 @@ echo "build hook: DOCKERFILE_PATH '$DOCKERFILE_PATH'"
 
 docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
             --build-arg VCS_REF=$(git rev-parse --short HEAD) \
-            -f $DOCKERFILE_PATH -t $IMAGE_NAME .
+            --env-file="$DOCKERFILE_PATH/env_file_all" \
+            -f "$DOCKERFILE_PATH" -t $IMAGE_NAME .
 

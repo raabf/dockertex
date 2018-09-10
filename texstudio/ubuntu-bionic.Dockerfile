@@ -1,11 +1,13 @@
 FROM raabf/latex-versions:bionic
 
+ENV TEXSTUDIO_VERSION=${TEXSTUDIO_VERSION_QT5}
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL maintainer="Fabian Raab <fabian@raab.link>" \
-	  texlive_version="2017" \
+	  texlive-version="2017" \
+      texstudio-version="$TEXSTUDIO_VERSION" \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="dockertex-texstudio" \
       org.label-schema.description="🐋📽 TeXstudio including Latex with multiple texlive versions and proper command line tools" \
@@ -27,7 +29,7 @@ COPY TEXSTUDIO_VERSION* ./
 # install texstudio
 # (A newer version from the developer, since the version in the
 #  standard repository is quite old)
-RUN wget -O texstudio.deb "http://download.opensuse.org/repositories/home:/jsundermeyer/xUbuntu_18.04/amd64/texstudio_$(head --lines=1 TEXSTUDIO_VERSION_QT5)_amd64.deb" && \
+RUN wget -O texstudio.deb "http://download.opensuse.org/repositories/home:/jsundermeyer/xUbuntu_18.04/amd64/texstudio_${TEXSTUDIO_VERSION}_amd64.deb" && \
     apt-get install --quiet --yes ./texstudio.deb && \
     command -v texstudio >/dev/null 2>&1 && \
     rm texstudio.deb && \
