@@ -11,7 +11,7 @@
 
 Both images are automatically rebuilt on Dockerhub when the Debian or Ubuntu base images change (they do on average each once per month).
 
-## 🗂️ Table of Contents
+## 📑️ Table of Contents
 <!-- MarkdownTOC -->
 
 + [🏆 Features](#%F0%9F%8F%86-features)
