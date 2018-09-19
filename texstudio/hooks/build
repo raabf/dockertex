@@ -5,6 +5,11 @@
 echo "--build hook called--"
 echo "build hook: IMAGE_NAME '$IMAGE_NAME'"
 echo "build hook: DOCKERFILE_PATH '$DOCKERFILE_PATH'"
+echo "build hook: CACHE_TAG '$CACHE_TAG'"
+echo "build hook: DOCKER_TAG '$DOCKER_TAG'"
+echo "build hook: DOCKER_REPO '$DOCKER_REPO'"
+echo "build hook: SOURCE_BRANCH '$SOURCE_BRANCH'"
+echo "build hook: SOURCE_COMMIT '$SOURCE_COMMIT'"
 
 docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
             --build-arg VCS_REF=$(git rev-parse --short HEAD) \
