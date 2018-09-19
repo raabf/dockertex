@@ -14,19 +14,19 @@ Both images are automatically rebuilt on Dockerhub when the Debian or Ubuntu bas
 ## 📑️ Table of Contents
 <!-- MarkdownTOC -->
 
-+ [🏆 Features](#%F0%9F%8F%86-features)
-+ [🏷 Supported tags](#%F0%9F%8F%B7-supported-tags)
-+ [🖱 Usage](#%F0%9F%96%B1-usage)
-    - [📓 dockertex](#%F0%9F%93%93-dockertex)
-    - [📽 dockertexstudio](#%F0%9F%93%BD-dockertexstudio)
-+ [🛠 Installation](#%F0%9F%9B%A0-installation)
-    - [👔 zsh plugin manager](#%F0%9F%91%94-zsh-plugin-manager)
++ [🏆 Features](#-features)
++ [🏷 Supported tags](#-supported-tags)
++ [🖱 Usage](#-usage)
+    - [📓 dockertex](#-dockertex)
+    - [📽 dockertexstudio](#-dockertexstudio)
++ [🛠 Installation](#-installation)
+    - [👔 zsh plugin manager](#-zsh-plugin-manager)
         * [zplug](#zplug)
-    - [⛓ Automated script](#%E2%9B%93-automated-script)
-    - [🔨 Manual](#%F0%9F%94%A8-manual)
-+ [🎈 Continuous Integration \(CI\)](#%F0%9F%8E%88-continuous-integration-ci)
+    - [⛓ Automated script](#-automated-script)
+    - [🔨 Manual](#-manual)
++ [🎈 Continuous Integration \(CI\)](#-continuous-integration-ci)
     - [GitLab CI](#gitlab-ci)
-+ [💡 Contributing](#%F0%9F%92%A1-contributing)
++ [💡 Contributing](#-contributing)
 
 <!-- /MarkdownTOC -->
 
