@@ -15,6 +15,7 @@ LABEL maintainer="Fabian Raab <fabian@raab.link>" \
       org.label-schema.vcs-url="https://github.com/raabf/dockertex.git" \
       org.label-schema.docker.cmd="dockertex" \
       org.label-schema.docker.cmd.help="dockertex --help" \
+      org.label-schema.usage="https://gitlab.com/raabf/dockertex/blob/master/README.md" \
       org.label-schema.schema-version="1.0"
 
 ENV DEBIAN_FRONTEND noninteractive
