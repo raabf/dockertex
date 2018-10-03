@@ -1,5 +1,9 @@
 FROM raabf/latex-versions:xenial
 
+ARG TEXSTUDIO_VERSION_QT4
+ARG TEXSTUDIO_VERSION_QT5
+ARG TEXSTUDIO_VERSION_QT5_DEBIAN9
+
 ENV TEXSTUDIO_VERSION=${TEXSTUDIO_VERSION_QT5}
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
