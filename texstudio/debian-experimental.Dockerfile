@@ -30,8 +30,6 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
 #    apt-get install --quiet --yes kde-style-breeze
 
-COPY TEXSTUDIO_VERSION* ./
-
 # install texstudio
 # (A newer version from the developer, since the version in the
 #  standard repository is quite old)

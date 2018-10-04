@@ -27,8 +27,6 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
 
-COPY TEXSTUDIO_VERSION* ./
-
 # install texstudio
 # (A newer version from the developer, since the version in the
 #  standard repository is quite old)
