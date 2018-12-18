@@ -155,7 +155,9 @@ docker run --rm \
     --volume=/tmp/.X11-unix:/tmp/.X11-unix \
     --user="$(id --user):$(id --group)" \
     -e DISPLAY=unix$DISPLAY \
+    -e XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
     --volume=$TEXSTUDIO_CONFIG_PATH:/home/.config/texstudio \
+    --volume=$XDG_RUNTIME_DIR:$XDG_RUNTIME_DIR \
     --volume=$HOME/:$HOME/ $volumes \
     -e HOME=/home/ \
     --name=texstudio_$image_tag --workdir=/home/ \
