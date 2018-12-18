@@ -148,6 +148,7 @@ use the following command to obtain it:
     exit $EXIT_FAILURE
 fi
 
+echo "XDG_RUNTIME_DIR = $XDG_RUNTIME_DIR"
 
 docker run --rm \
     --cap-drop=all \
