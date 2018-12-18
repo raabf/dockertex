@@ -40,18 +40,22 @@ Whi='\e[0;37m';     BWhi='\e[1;37m';    UWhi='\e[4;37m';    IWhi='\e[0;97m';    
 
 function usage #(exit_code: Optional) 
 {
-echo -e "${BRed}Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}-t|--tag ${UGre}tagname${RCol}] [${Blu}-v|--volume ${UGre}mapping${RCol}]* [${UGre}texstudio options${RCol}]
-       ${Yel}$SCRIPTNAME${RCol} [${Blu}-h|--help${RCol}]
+echo -e "${BRed}Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}-t|--tag ${UGre}tagname${RCol}] [${Blu}-v|--volume ${UGre}mapping${RCol}]* [- ${UGre}texstudio options${RCol}]
+       ${Yel}$SCRIPTNAME${RCol} ${Blu}-h|--help${RCol}
+       ${Yel}$SCRIPTNAME${RCol} [${Blu}-t|--tag ${UGre}tagname${RCol}] - ${Blu}--help${RCol}
 
     Launches the $TEXSTUDIO_IMAGE_NAME docker-container and adds the home
     directory as a volume to ${Yel}/home/\$HOME${RCol} in the docker container. Then 
-    texstudio is started in the container with ${UGre}texstudio options${RCol} as parameter.
+    texstudio is started in the container with ${UGre}texstudio options${RCol} as parameters.
     TexStudios cofiguration is stored at ${Yel}$TEXSTUDIO_CONFIG_PATH${RCol}
     Afterwards, the container is removed.
 
 ${BRed}OPTIONS:${RCol}
     ${Blu}-h, --help${RCol}
-        Print this help and exit.
+        Print this help text and exit.
+
+    - ${Blu}--help${RCol}
+        Print texstudio help for the available ${UGre}texstudio options${RCol} and exit.
 
     ${Blu}-t, --tag ${UGre}tagname${RCol}
         The latex docker container with tag ${UGre}tagname${RCol} will be used.
