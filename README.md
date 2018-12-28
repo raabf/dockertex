@@ -62,6 +62,7 @@ To specify your texlive version you can either use the texlive tag (texlive2012,
 |    v2018 |             |  Debian | experimental| [![Latex Dockerfile](https://img.shields.io/badge/📓-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/debian-experimental.Dockerfile "Latex Dockerfile") [![microbadger](https://images.microbadger.com/badges/image/raabf/latex-versions:experimental.svg)](https://microbadger.com/images/raabf/latex-versions:experimental "Latex microbadger.com size and layer information")  [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-experimental.Dockerfile "TeXstudio Dockerfile") [![microbadger](https://images.microbadger.com/badges/image/raabf/texstudio-versions:experimental.svg)](https://microbadger.com/images/raabf/texstudio-versions:experimental "TeXstudio microbadger.com size and layer information") | in development; no texstudio² |
 
 ¹ TeXstudio does not provide builds for this Linux distribution version any more. The container is build with the last available TeXstudio version.
+
 ² The X-server sharing seems to not work any more for ubuntu bionic or later. I do no found any info nor a solution for that; see [issue #1](https://gitlab.com/raabf/dockertex/issues/1). Hence the latest tag keeps at stretch until it is working again, even if bionic is the latest stable distribution. Tell me your experience or if you have some new information on that.
 
 
