@@ -138,6 +138,8 @@ if [ -z $menu_tag ]; then
     exit $EXIT_FAILURE
 fi
 
+mkdir --parents "$icon_prefix" || exit $EXIT_ERROR
+mkdir --parents "$applications_prefix" || exit $EXIT_ERROR
 
 cp --recursive --no-target-directory \
     "$SCRIPTPATH/misc/icons/" \
@@ -155,3 +157,4 @@ echo "Exec=$SCRIPTPATH/bin/dockertexstudio.sh --tag $menu_tag $volumes %F" >> "$
 echo "Icon=$icon_prefix/hicolor/scalable/apps/texstudio.svg" >> "$desktop_file" || exit $EXIT_ERROR
 
 exit $EXIT_SUCCESS
+
