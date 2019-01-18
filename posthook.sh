@@ -97,8 +97,14 @@ while getopts "$optspec" OPTION ; do
                     ;;
                 menu-volume)
                     # '=' is an alternative seperator for ':' (workaround for zplug hook bug)
-                    tmp="$(echo "${!OPTIND}" | tr = :)"
-                    volumes="$volumes --volume ${tmp}"; OPTIND=$(( $OPTIND + 1 ))
+                    volumes_colon="$(echo "${!OPTIND}" | tr = :)"
+                    # check if both sides of : have a value
+                    IFS=':' arr=($volumes_colon); unset IFS
+                    if [ "${#arr[@]}" -lt "2" ] || [ -z "${arr[0]}" ] || [ -z "${arr[1]}" ]; then
+			            echo -e "${Blu}--menu-volume ${volumes_colon}${Red} is malformed.${RCol}" >&2
+                        exit $EXIT_FAILURE
+                    fi    
+                    volumes="$volumes --volume ${volumes_colon}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
 				*)	
 				if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" == ":" ]; then
