@@ -29,7 +29,7 @@ RUN apt-get update && \
 # install some common tools used with latex
 RUN apt-get install --quiet --yes \
     wget lsb-release biber \
-    python-pygments gnuplot inkscape pandoc \
+    python3-pygments gnuplot inkscape pandoc \
     make git && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
