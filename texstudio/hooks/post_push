@@ -18,6 +18,7 @@ aliasmap[xenial]="texlive2015"
 aliasmap[stretch]="texlive2016 latest"
 aliasmap[bionic]="texlive2017"
 aliasmap[buster]="texlive2018 testing"
+aliasmap[experimental]="texlive2019"
 
 
 array=( $(echo ${aliasmap[$DOCKER_TAG]}) )
