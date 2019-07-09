@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM multiarch/debian-debootstrap:armhf-buster
 # texlive 2018
 
 # Build-time metadata as defined at http://label-schema.org

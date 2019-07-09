@@ -5,9 +5,9 @@
 
 #### 🏬 Dockerhub:
 
-| 📓[raabf/latex-versions](https://hub.docker.com/r/raabf/latex-versions) | 📽[raabf/texstudio-versions](https://hub.docker.com/r/raabf/texstudio-versions)|
-|---------------|---------------|
-| ![docker stars](https://img.shields.io/docker/stars/raabf/latex-versions.svg) ![docker pulls](https://img.shields.io/docker/pulls/raabf/latex-versions.svg) | ![docker stars](https://img.shields.io/docker/stars/raabf/texstudio-versions.svg) ![docker pulls](https://img.shields.io/docker/pulls/raabf/texstudio-versions.svg) |
+| 📓[raabf/latex-versions](https://hub.docker.com/r/raabf/latex-versions) | 📱[raabf/latex-versions-arm](https://hub.docker.com/r/raabf/latex-versions-arm) (testing)| 📽[raabf/texstudio-versions](https://hub.docker.com/r/raabf/texstudio-versions)|
+|---------------|---------------|---------------|
+| ![docker stars](https://img.shields.io/docker/stars/raabf/latex-versions.svg) ![docker pulls](https://img.shields.io/docker/pulls/raabf/latex-versions.svg) | ![docker stars](https://img.shields.io/docker/stars/raabf/latex-versions-arm.svg) ![docker pulls](https://img.shields.io/docker/pulls/raabf/latex-versions-arm.svg) | ![docker stars](https://img.shields.io/docker/stars/raabf/texstudio-versions.svg) ![docker pulls](https://img.shields.io/docker/pulls/raabf/texstudio-versions.svg) |
 
 Both images are automatically rebuilt on Dockerhub when the Debian or Ubuntu base images change (they do on average each once per month).
 

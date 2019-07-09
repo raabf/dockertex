@@ -1,12 +1,12 @@
-FROM debian:buster
-# texlive 2018
+FROM multiarch/debian-debootstrap:armhf-jessie
+# texlive 2014
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL maintainer="Fabian Raab <fabian@raab.link>" \
-	    texlive_version="2018" \
+	    texlive_version="2014" \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="dockertex-latex" \
       org.label-schema.description="🐋📓 Latex with multiple texlive versions and proper command line tools 🎈 suitable for CI" \
@@ -29,7 +29,7 @@ RUN apt-get update && \
 # install some common tools used with latex
 RUN apt-get install --quiet --yes \
     wget lsb-release biber \
-    python3-pygments gnuplot inkscape pandoc \
+    python-pygments gnuplot inkscape pandoc \
     make git && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \

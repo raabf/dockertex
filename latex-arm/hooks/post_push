@@ -1,0 +1,34 @@
+#!/bin/bash
+
+echo "--post_push hook called--"
+echo "post_push: IMAGE_NAME '$IMAGE_NAME'"
+echo "post_push: DOCKERFILE_PATH '$DOCKERFILE_PATH'"
+echo "post_push: CACHE_TAG '$CACHE_TAG'"
+echo "post_push: DOCKER_TAG '$DOCKER_TAG'"
+echo "post_push: DOCKER_REPO '$DOCKER_REPO'"
+echo "post_push: SOURCE_BRANCH '$SOURCE_BRANCH'"
+echo "post_push: SOURCE_COMMIT '$SOURCE_COMMIT'"
+
+declare -A aliasmap
+
+aliasmap[wheezy]="texlive2012"
+aliasmap[trusty]="texlive2013"
+aliasmap[jessie]="texlive2014"
+aliasmap[xenial]="texlive2015"
+aliasmap[stretch]="texlive2016 latest"
+aliasmap[bionic]="texlive2017"
+aliasmap[buster]="texlive2018 testing"
+aliasmap[experimental]="texlive2019"
+
+
+array=( $(echo ${aliasmap[$DOCKER_TAG]}) )
+echo "post_push: use alias list '${aliasmap[$DOCKER_TAG]}'"
+
+for aliastag in ${array[@]}; do
+    
+    echo "post_push: tag and push '$aliastag'"
+    docker tag $IMAGE_NAME $DOCKER_REPO:$aliastag
+    docker push $DOCKER_REPO:$aliastag
+
+done
+

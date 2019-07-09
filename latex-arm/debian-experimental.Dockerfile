@@ -1,5 +1,5 @@
-FROM debian:buster
-# texlive 2018
+FROM multiarch/debian-debootstrap:armhf-experimental
+# texlive 2018 (may change since buster is in development)
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
@@ -29,7 +29,7 @@ RUN apt-get update && \
 # install some common tools used with latex
 RUN apt-get install --quiet --yes \
     wget lsb-release biber \
-    python3-pygments gnuplot inkscape pandoc \
+    python-pygments gnuplot inkscape pandoc \
     make git && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
