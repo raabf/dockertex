@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# $IMAGE_NAME var is injected into the build so the tag is correct.
-
 echo "--build hook called--"
 echo "build hook: IMAGE_NAME '$IMAGE_NAME'"
 echo "build hook: DOCKERFILE_PATH '$DOCKERFILE_PATH'"
@@ -16,20 +14,29 @@ declare -A versionmap # The installed texlive version for documentation
 declare -A pkgmap # Additional per distribution packages
 declare -A debmap # Additional repository line for apt/sources.list
 
-# For ubuntu in debmap it would be “http://archive.ubuntu.com/ubuntu/ trusty multiverse”, but it is already activated
-versionmap[wheezy]="2012";       basemap[wheezy]="debian:wheezy";             pkgmap[wheezy]="python-pygments";        debmap[wheezy]="deb http://deb.debian.org/debian/ wheezy contrib non-free"
-versionmap[trusty]="2013";       basemap[trusty]="ubuntu:trusty";             pkgmap[trusty]="python-pygments";        debmap[trusty]=""
-versionmap[jessie]="2014";       basemap[jessie]="debian:jessie";             pkgmap[jessie]="python-pygments";        debmap[jessie]="deb http://deb.debian.org/debian/ jessie contrib non-free"
-versionmap[xenial]="2015";       basemap[xenial]="ubuntu:xenial";             pkgmap[xenial]="python-pygments";        debmap[xenial]=""
-versionmap[stretch]="2016";      basemap[stretch]="debian:stretch";           pkgmap[stretch]="python-pygments";       debmap[stretch]="deb http://deb.debian.org/debian/ stretch contrib non-free"
-versionmap[bionic]="2017";       basemap[bionic]="ubuntu:bionic";             pkgmap[bionic]="python-pygments";        debmap[bionic]=""
-versionmap[buster]="2018";       basemap[buster]="debian:buster";             pkgmap[buster]="python3-pygments";       debmap[buster]="deb http://deb.debian.org/debian/ buster contrib non-free"
-versionmap[sid]="2019";          basemap[sid]="debian:sid";                   pkgmap[sid]="python3-pygments";          debmap[sid]="deb http://deb.debian.org/debian/ experimental contrib non-free"
+#                                                          For ubuntu in debmap it would be “http://archive.ubuntu.com/ubuntu/ trusty multiverse”, but it is already activated
+versionmap[wheezy]="2012";  basemap[wheezy]="debian:wheezy";   pkgmap[wheezy]="python-pygments";  debmap[wheezy]="deb http://deb.debian.org/debian/ wheezy contrib non-free"
+versionmap[trusty]="2013";  basemap[trusty]="ubuntu:trusty";   pkgmap[trusty]="python-pygments";  debmap[trusty]=""
+versionmap[jessie]="2014";  basemap[jessie]="debian:jessie";   pkgmap[jessie]="python-pygments";  debmap[jessie]="deb http://deb.debian.org/debian/ jessie contrib non-free"
+versionmap[xenial]="2015";  basemap[xenial]="ubuntu:xenial";   pkgmap[xenial]="python-pygments";  debmap[xenial]=""
+versionmap[stretch]="2016"; basemap[stretch]="debian:stretch"; pkgmap[stretch]="python-pygments"; debmap[stretch]="deb http://deb.debian.org/debian/ stretch contrib non-free"
+versionmap[bionic]="2017";  basemap[bionic]="ubuntu:bionic";   pkgmap[bionic]="python-pygments";  debmap[bionic]=""
+versionmap[buster]="2018";  basemap[buster]="debian:buster";   pkgmap[buster]="python3-pygments"; debmap[buster]="deb http://deb.debian.org/debian/ buster contrib non-free"
+versionmap[sid]="2019";     basemap[sid]="debian:sid";         pkgmap[sid]="python3-pygments";    debmap[sid]="deb http://deb.debian.org/debian/ experimental contrib non-free"
 
+basemap[armhf-jessie]="multiarch/debian-debootstrap:armhf-jessie";   basemap[arm64-jessie]="multiarch/debian-debootstrap:arm64-jessie";   
+basemap[armhf-xenial]="multiarch/ubuntu-debootstrap:armhf-xenial";   basemap[arm64-xenial]="multiarch/ubuntu-debootstrap:arm64-xenial";   
+basemap[armhf-stretch]="multiarch/debian-debootstrap:armhf-stretch"; basemap[arm64-stretch]="multiarch/debian-debootstrap:arm64-stretch"; 
+basemap[armhf-bionic]="multiarch/ubuntu-debootstrap:armhf-bionic";   basemap[arm64-bionic]="multiarch/ubuntu-debootstrap:arm64-bionic";   
+basemap[armhf-buster]="multiarch/debian-debootstrap:armhf-buster";   basemap[arm64-buster]="multiarch/debian-debootstrap:arme64buster";   
+basemap[armhf-sid]="multiarch/debian-debootstrap:armhf-sid";         basemap[arm64-sid]="multiarch/debian-debootstrap:arm64-sid";         
+
+
+# $IMAGE_NAME var is injected into the build so the tag is correct.
 docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
              --build-arg VCS_REF=$(git rev-parse --short HEAD) \
-             --build-arg BASE_IMAGE="${basemap[$DOCKER_TAG]}" \
-             --build-arg TEXLIVE_VERSION="${versionmap[$DOCKER_TAG]}" \
-             --build-arg PACKAGES_INSTALL="${pkgmap[$DOCKER_TAG]}" \
-             --build-arg DEBLINE="${debmap[$DOCKER_TAG]}" \
+             --build-arg BASE_IMAGE="${basemap[${DOCKER_TAG}]}" \
+             --build-arg TEXLIVE_VERSION="${versionmap[${DOCKER_TAG##*-}]}" \
+             --build-arg PACKAGES_INSTALL="${pkgmap[${DOCKER_TAG##*-}]}" \
+             --build-arg DEBLINE="${debmap[${DOCKER_TAG##*-}]}" \
              --file $DOCKERFILE_PATH --tag $IMAGE_NAME .
