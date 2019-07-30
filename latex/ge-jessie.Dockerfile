@@ -3,6 +3,7 @@ FROM $BASE_IMAGE
 # Generic Docker file for greater than ubuntu jessie (including debian).
 
 ARG TEXLIVE_VERSION
+ARG PACKAGES_INSTALL
 ARG DEBLINE
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
@@ -35,8 +36,9 @@ RUN echo "$DEBLINE" >> "/etc/apt/sources.list" && \
 RUN echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections && \
     apt-get install --quiet --yes \
     wget lsb-release biber \
-    python3-pygments gnuplot inkscape pandoc \
+    gnuplot inkscape pandoc \
     make git \
+    ${PACKAGES_INSTALL} \
     ttf-mscorefonts-installer fonts-liberation && \
     fc-cache -f -v && \
     apt-get clean && \
