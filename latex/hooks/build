@@ -11,7 +11,22 @@ echo "build hook: DOCKER_REPO '$DOCKER_REPO'"
 echo "build hook: SOURCE_BRANCH '$SOURCE_BRANCH'"
 echo "build hook: SOURCE_COMMIT '$SOURCE_COMMIT'"
 
-docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
-            --build-arg VCS_REF=$(git rev-parse --short HEAD) \
-            --file $DOCKERFILE_PATH --tag $IMAGE_NAME .
+declare -A basemap
+declare -A versionmap
+declare -A codenamemap
 
+versionmap[wheezy]="2012";       basemap[wheezy]="debian:wheezy";             codenamemap[wheezy]="wheezy"
+versionmap[trusty]="2013";       basemap[trusty]="ubuntu:trusty";             codenamemap[trusty]="trusty"
+versionmap[jessie]="2014";       basemap[jessie]="debian:jessie";             codenamemap[jessie]="jessie"
+versionmap[xenial]="2015";       basemap[xenial]="ubuntu:xenial";             codenamemap[xenial]="xenial"
+versionmap[stretch]="2016";      basemap[stretch]="debian:stretch";           codenamemap[stretch]="stretch"
+versionmap[bionic]="2017";       basemap[bionic]="ubuntu:bionic";             codenamemap[bionic]="bionic"
+versionmap[buster]="2018";       basemap[buster]="debian:buster";             codenamemap[buster]="buster"
+versionmap[experimental]="2019"; basemap[experimental]="debian:experimental"; codenamemap[experimental]="experimental"
+
+docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
+             --build-arg VCS_REF=$(git rev-parse --short HEAD) \
+             --build-arg BASE_IMAGE="${basemap[$DOCKER_TAG]}" \
+             --build-arg TEXLIVE_VERSION="${versionmap[$DOCKER_TAG]}" \
+             --build-arg CODENAME="${codenamemap[$DOCKER_TAG]}" \
+             --file $DOCKERFILE_PATH --tag $IMAGE_NAME .

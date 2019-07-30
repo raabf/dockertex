@@ -1,16 +1,20 @@
-FROM debian:experimental
-# texlive 2018 (may change since buster is in development)
+ARG BASE_IMAGE
+FROM $BASE_IMAGE
+# Generic Docker file for greater than ubuntu jessie (including debian).
 
+ARG TEXLIVE_VERSION
+ARG CODENAME
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL maintainer="Fabian Raab <fabian@raab.link>" \
-	    texlive_version="2018" \
+	    texlive_version=$TEXLIVE_VERSION \
+      os_codename=$CODENAME \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="dockertex-latex" \
       org.label-schema.description="🐋📓 Latex with multiple texlive versions and proper command line tools 🎈 suitable for CI" \
-      org.label-schema.url="https://github.com/raabf/dockertex.git" \
+      org.label-schema.url="https://github.com/raabf/dockertex" \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/raabf/dockertex.git" \
       org.label-schema.docker.cmd="dockertex" \
