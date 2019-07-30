@@ -18,6 +18,7 @@ EXIT_ERROR=2
 EXIT_BUG=10
 
 LATEX_IMAGE_NAME="raabf/latex-versions"
+LATEX_ARM_IMAGE_NAME="raabf/latex-versions-arm"
 TEXSTUDIO_IMAGE_NAME="raabf/texstudio-versions"
 
 image_tag="${DOCKERTEX_DEFAULT_TAG}"
@@ -44,8 +45,8 @@ echo -e "${BRed}Usage: ${Yel}$SCRIPTNAME${RCol} [${Blu}-t|--tag ${UGre}tagname${
        ${Yel}$SCRIPTNAME${RCol} [${Blu}-h|--help${RCol}]
 
     Launches the $TEXSTUDIO_IMAGE_NAME – or if not available as
-    alternative the $LATEX_IMAGE_NAME docker-container – with the 
-    tag ${UGre}tagname${RCol} and adds the current working directory as a volume.
+    alternative the $LATEX_IMAGE_NAME or $LATEX_ARM_IMAGE_NAME docker-container – 
+    with the tag ${UGre}tagname${RCol} and adds the current working directory as a volume.
     Then ${UGre}command${RCol} is executed in the container in the 
     current working directory. Afterwards, the container is removed.
 
@@ -60,6 +61,7 @@ ${BRed}OPTIONS:${RCol}
 
 ${BRed}EXAMPLES:${RCol}
     ${Yel}$SCRIPTNAME${RCol} ${Blu}--tag ${Gre}texlive2016${RCol} ${Gre}make all${RCol}
+    ${Yel}$SCRIPTNAME${RCol} ${Blu}--tag ${Gre}arm64-texlive2016${RCol} ${Gre}make${RCol}
     ${Yel}export${RCol} ${Blu}DOCKERTEX_DEFAULT_TAG${RCol}=${Gre}texlive2017${RCol}
     ${Yel}$SCRIPTNAME${RCol} ${Gre}pdflatex document.tex${RCol}
     
@@ -144,11 +146,19 @@ else
     if docker inspect --type=image $LATEX_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
         image_name=$LATEX_IMAGE_NAME
     else
-        echo -e "${Red}The requested docker image with tag ${Gre}$image_tag${Red} is locally not available.
-Please use one of the following commands to obtain it:
-        ${Blu}docker pull ${Gre}$LATEX_IMAGE_NAME:$image_tag${RCol}
+        if docker inspect --type=image $LATEX_ARM_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
+            image_name=$LATEX_ARM_IMAGE_NAME
+        else
+            echo -e "${Red}The requested docker image with tag ${Gre}$image_tag${Red} is locally not available.
+Please use one of the following commands to obtain it:" >&2
+            if [[ ${image_tag%%-*} == "arm"* ]]; then
+                echo -e "       ${Blu}docker pull ${Gre}$LATEX_ARM_IMAGE_NAME:$image_tag${RCol}" >&2
+            else
+                echo -e "        ${Blu}docker pull ${Gre}$LATEX_IMAGE_NAME:$image_tag${RCol}
         ${Blu}docker pull ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${RCol}" >&2
-        exit $EXIT_FAILURE
+            fi
+            exit $EXIT_FAILURE
+        fi
     fi
 fi
 
