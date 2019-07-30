@@ -20,13 +20,17 @@ aliasmap[bionic]="texlive2017"
 aliasmap[buster]="texlive2018 testing"
 aliasmap[experimental]="texlive2019"
 
-
-array=( $(echo ${aliasmap[$DOCKER_TAG]}) )
-echo "post_push: use alias list '${aliasmap[$DOCKER_TAG]}'"
+array=( $(echo ${aliasmap[${DOCKER_TAG##*-}]}) )
+echo "post_push: use alias list '${array[@]}'"
 
 for aliastag in ${array[@]}; do
     
-    echo "post_push: tag and push '$aliastag'"
+	if [[ ${DOCKER_TAG%%-*} == "arm"* ]]; then
+		# Prefix the alias tag with the architecture if not x86 (e.g armhf-texlive2017)
+		aliastag="${DOCKER_TAG%%-*}-${aliastag}"
+	fi
+
+    echo "post_push: tag and push '$DOCKER_REPO:$aliastag'"
     docker tag $IMAGE_NAME $DOCKER_REPO:$aliastag
     docker push $DOCKER_REPO:$aliastag
 
