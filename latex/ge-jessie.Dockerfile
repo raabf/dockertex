@@ -3,14 +3,13 @@ FROM $BASE_IMAGE
 # Generic Docker file for greater than ubuntu jessie (including debian).
 
 ARG TEXLIVE_VERSION
-ARG CODENAME
+ARG DEBLINE
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL maintainer="Fabian Raab <fabian@raab.link>" \
 	    texlive_version=$TEXLIVE_VERSION \
-      os_codename=$CODENAME \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="dockertex-latex" \
       org.label-schema.description="🐋📓 Latex with multiple texlive versions and proper command line tools 🎈 suitable for CI" \
@@ -24,21 +23,25 @@ LABEL maintainer="Fabian Raab <fabian@raab.link>" \
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# DEBLINE will include repository for ttf-mscorefonts-installer
 # install latex
 # remove documentation packages of latex to save disk space
-RUN apt-get update && \
+RUN echo "$DEBLINE" >> "/etc/apt/sources.list" && \
+    apt-get update && \
     apt-get install --quiet --yes texlive-full && \
     apt-get remove --quiet --yes "texlive-*-doc"
 
 # install some common tools used with latex
-RUN apt-get install --quiet --yes \
+RUN echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections && \
+    apt-get install --quiet --yes \
     wget lsb-release biber \
-    python-pygments gnuplot inkscape pandoc \
-    make git && \
+    python3-pygments gnuplot inkscape pandoc \
+    make git \
+    ttf-mscorefonts-installer fonts-liberation && \
+    fc-cache -f -v && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
-
 
 WORKDIR /home/workdir
 

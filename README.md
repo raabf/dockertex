@@ -75,6 +75,8 @@ Obviously docker must be installed on your system.
 You can either use the dockertexstudio images or – if you never need TeXstudio – just the dockertex images. The dockertexstudio images include all features of the dockertex images.  `dockertex` will automatically use the dockertexstudio images when installed on the local system, so that not twice as much disk space is occupied on your computer. 
  `dockertex` and `dockertexstudio`  will promt you to pull the docker images when necessary.
 
+**Fonts** The images contain debian’s non-free repository and ubuntu’s multiverse. Beside the default latex fonts, Liberation and MSCoreFonts are installed. Liberation are a free replacement for the MSCoreFonts. If you still use the MSCoreFonts you accept their [EULA](http://corefonts.sourceforge.net/eula.htm).
+
 
 ### 📓 dockertex
 
