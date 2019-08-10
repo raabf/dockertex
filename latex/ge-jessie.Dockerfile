@@ -28,6 +28,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # install latex
 # remove documentation packages of latex to save disk space
 RUN echo "$DEBLINE" >> "/etc/apt/sources.list" && \
+    cat "/etc/apt/sources.list" && \
     apt-get update && \
     apt-get install --quiet --yes texlive-full && \
     apt-get remove --quiet --yes "texlive-*-doc"
