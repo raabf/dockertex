@@ -40,7 +40,8 @@ RUN echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula sele
     gnuplot inkscape pandoc \
     make git \
     ${PACKAGES_INSTALL} \
-    ttf-mscorefonts-installer fonts-liberation && \
+    ttf-mscorefonts-installer fonts-liberation \
+    fonts-dejavu fonts-cmu lmodern tex-gyre && \
     fc-cache -f -v && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
