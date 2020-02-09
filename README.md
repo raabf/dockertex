@@ -1,7 +1,7 @@
 🐋📓 DockerTeX ➕ 🐋📽 DockerTeXstudio
 =====================================
 
-![docker automated](https://img.shields.io/docker/automated/raabf/latex-versions.svg) ![maintained](https://img.shields.io/maintenance/yes/2019.svg) [![licence](https://img.shields.io/github/license/raabf/dockertex.svg)](https://gitlab.com/raabf/dockertex/blob/master/LICENSE) [![microbadger commit](https://images.microbadger.com/badges/commit/raabf/texstudio-versions.svg)](https://gitlab.com/raabf/dockertex/ "Repository")
+![docker automated](https://img.shields.io/docker/automated/raabf/latex-versions.svg) ![maintained](https://img.shields.io/maintenance/yes/2020.svg) [![licence](https://img.shields.io/github/license/raabf/dockertex.svg)](https://gitlab.com/raabf/dockertex/blob/master/LICENSE) [![microbadger commit](https://images.microbadger.com/badges/commit/raabf/texstudio-versions.svg)](https://gitlab.com/raabf/dockertex/ "Repository")
 
 #### 🏬 Dockerhub:
 
