@@ -10,7 +10,7 @@ ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL maintainer="Fabian Raab <fabian@raab.link>" \
-	  texlive-version="2018" \
+	  texlive-version="2019" \
       texstudio-version="$TEXSTUDIO_VERSION" \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="dockertex-texstudio" \
