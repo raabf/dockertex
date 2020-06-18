@@ -17,8 +17,9 @@ aliasmap[jessie]="texlive2014"
 aliasmap[xenial]="texlive2015"
 aliasmap[stretch]="texlive2016 latest"
 aliasmap[bionic]="texlive2017"
-aliasmap[buster]="texlive2018 testing"
-aliasmap[sid]="texlive2019"
+aliasmap[buster]="texlive2018"
+aliasmap[focal]="texlive2019 testing"
+aliasmap[sid]="texlive2020"
 
 array=( $(echo ${aliasmap[${DOCKER_TAG##*-}]}) )
 echo "post_push: use alias list '${array[@]}'"

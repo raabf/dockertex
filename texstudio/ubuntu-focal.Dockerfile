@@ -1,17 +1,17 @@
-FROM raabf/latex-versions:experimental
+FROM raabf/latex-versions:focal
 
 ARG TEXSTUDIO_VERSION_QT4
 ARG TEXSTUDIO_VERSION_QT5
 ARG TEXSTUDIO_VERSION_QT5_DEBIAN9
 ARG TEXSTUDIO_VERSION_QT5_DEBIAN10
 
-ENV TEXSTUDIO_VERSION=${TEXSTUDIO_VERSION_QT5_DEBIAN10}
+ENV TEXSTUDIO_VERSION=${TEXSTUDIO_VERSION_QT5}
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL maintainer="Fabian Raab <fabian@raab.link>" \
-	  texlive-version="2020" \
+	  texlive-version="2019" \
       texstudio-version="$TEXSTUDIO_VERSION" \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="dockertex-texstudio" \
@@ -27,14 +27,13 @@ LABEL maintainer="Fabian Raab <fabian@raab.link>" \
 ENV DEBIAN_FRONTEND noninteractive
 
 # for the modern KDE Plasma look (configurable in texstudio options)
-# not available in experimental yet
-RUN apt-get update
-#    apt-get install --quiet --yes kde-style-breeze
+RUN apt-get update && \
+    apt-get install --quiet --yes kde-style-breeze
 
 # install texstudio
 # (A newer version from the developer, since the version in the
 #  standard repository is quite old)
-RUN wget -O texstudio.deb "http://download.opensuse.org/repositories/home:/jsundermeyer/Debian_10/amd64/texstudio_${TEXSTUDIO_VERSION}_amd64.deb" && \
+RUN wget -O texstudio.deb "http://download.opensuse.org/repositories/home:/jsundermeyer/xUbuntu_20.04/amd64/texstudio_${TEXSTUDIO_VERSION}_amd64.deb" && \
     apt-get install --quiet --yes ./texstudio.deb && \
     command -v texstudio >/dev/null 2>&1 && \
     rm texstudio.deb && \
