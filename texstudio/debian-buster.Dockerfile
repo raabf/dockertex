@@ -3,8 +3,9 @@ FROM raabf/latex-versions:buster
 ARG TEXSTUDIO_VERSION_QT4
 ARG TEXSTUDIO_VERSION_QT5
 ARG TEXSTUDIO_VERSION_QT5_DEBIAN9
+ARG TEXSTUDIO_VERSION_QT5_DEBIAN10
 
-ENV TEXSTUDIO_VERSION=${TEXSTUDIO_VERSION_QT5_DEBIAN9}
+ENV TEXSTUDIO_VERSION=${TEXSTUDIO_VERSION_QT5_DEBIAN10}
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG VCS_REF
@@ -32,7 +33,7 @@ RUN apt-get update && \
 # install texstudio
 # (A newer version from the developer, since the version in the
 #  standard repository is quite old)
-RUN wget -O texstudio.deb "http://download.opensuse.org/repositories/home:/jsundermeyer/Debian_9.0/amd64/texstudio_${TEXSTUDIO_VERSION}_amd64.deb" && \
+RUN wget -O texstudio.deb "http://download.opensuse.org/repositories/home:/jsundermeyer/Debian_10/amd64/texstudio_${TEXSTUDIO_VERSION}_amd64.deb" && \
     apt-get install --quiet --yes ./texstudio.deb && \
     command -v texstudio >/dev/null 2>&1 && \
     rm texstudio.deb && \
