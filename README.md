@@ -42,7 +42,8 @@ Both images are automatically rebuilt on Dockerhub when the Debian or Ubuntu bas
   + 👷 Easy installation via script or shell plugin-manager.
   + 🗃 Menu entries for TeXstudio of all installed texlive versions.
   + 🖥 The TexStudio GUI runs directly on your local X-server via shared sockets (no ssh X-forwarding or something like that).
-  +  📍 The TexStudio’s “Go to PDF” and ‘’Go to Source Code” are working as well as the [LanguageTool](https://languagetool.org/) integration.
+  + 📍 The TexStudio’s “Go to PDF” and ‘’Go to Source Code” are working as well as the [LanguageTool](https://languagetool.org/) integration.
+  + 🦫 Supports also [Podman](https://podman.io/) instead of docker CLI.
 
 
 
@@ -72,7 +73,7 @@ To specify your texlive version you can either use the texlive tag (texlive2012,
 
 ## 🖱 Usage
 
-Obviously docker must be installed on your system.
+Either [docker CLI](https://docs.docker.com/engine/reference/run/) or [Podman](https://podman.io/) are required to run the container.
 You can either use the dockertexstudio images or – if you never need TeXstudio – just the dockertex images. The dockertexstudio images include all features of the dockertex images.  `dockertex` will automatically use the dockertexstudio images when installed on the local system, so that not twice as much disk space is occupied on your computer. 
  `dockertex` and `dockertexstudio`  will promt you to pull the docker images when necessary.
 
@@ -102,6 +103,10 @@ The general syntax is:
 
     export DOCKERTEX_DEFAULT_TAG="texlive2016"
 
+**Engine** To run the container, select an executable within your PATH. It defaults to `podman` when it is installed, else `docker`. Specify it with:
+
+    export DOCKERTEX_ENGINE="podman"
+    export DOCKERTEX_ENGINE="docker"
 
 ### 📽 dockertexstudio
 
