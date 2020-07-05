@@ -1,10 +1,10 @@
 #!/bin/bash
 #############################################################
 ## Title: docketex
-## Abstact: Ececutes a command in a latex docker container
+## Abstact: Ececutes a command in a latex container
 ##          within the current working directory.
 ## Author:  Fabian Raab <fabian@raab.link>
-## Dependencies: docker
+## Dependencies: docker/podman
 ## Creation Date: 2017-10-28
 ## Last Edit: 2018-03-22
 ##############################################################
@@ -20,6 +20,15 @@ EXIT_BUG=10
 LATEX_IMAGE_NAME="raabf/latex-versions"
 LATEX_ARM_IMAGE_NAME="raabf/latex-versions-arm"
 TEXSTUDIO_IMAGE_NAME="raabf/texstudio-versions"
+
+# Check which container engine to use. Prefer podman since distros (e.g. Fedora) start to deprecate docker.
+if [[ -z $DOCKERTEX_ENGINE ]]; then
+  if hash podman; then
+    engine=podman
+  elif hash docker; then
+    engine=docker
+  fi
+fi
 
 image_tag="${DOCKERTEX_DEFAULT_TAG}"
 
@@ -59,6 +68,11 @@ ${BRed}OPTIONS:${RCol}
         If this option is omitted, ${UGre}tagname${RCol} defaults to the 
         environment variable ${Blu}DOCKERTEX_DEFAULT_TAG${RCol}.
 
+    ${Blu}--engine ${UGre}enginename${RCol}
+        The executable ${UGre}enginename${RCol} will be used to run the container.
+        It defaults to ${Gre}podman${RCol} when it is installed, else ${Gre}docker${RCol}.
+
+
 ${BRed}EXAMPLES:${RCol}
     ${Yel}$SCRIPTNAME${RCol} ${Blu}--tag ${Gre}texlive2016${RCol} ${Gre}make all${RCol}
     ${Yel}$SCRIPTNAME${RCol} ${Blu}--tag ${Gre}arm64-texlive2016${RCol} ${Gre}make${RCol}
@@ -89,6 +103,9 @@ while getopts "$optspec" OPTION ; do
                     ;;
                 tag)
                     image_tag="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    ;;
+                engine)
+                    engine="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
                 *)  
                 if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" == ":" ]; then
@@ -140,21 +157,21 @@ if [ "$image_tag" == "" ]; then
 fi
 
 
-if docker inspect --type=image $TEXSTUDIO_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
+if $engine inspect --type=image $TEXSTUDIO_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
     image_name=$TEXSTUDIO_IMAGE_NAME
 else
-    if docker inspect --type=image $LATEX_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
+    if $engine inspect --type=image $LATEX_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
         image_name=$LATEX_IMAGE_NAME
     else
-        if docker inspect --type=image $LATEX_ARM_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
+        if $engine inspect --type=image $LATEX_ARM_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
             image_name=$LATEX_ARM_IMAGE_NAME
         else
             echo -e "${Red}The requested docker image with tag ${Gre}$image_tag${Red} is locally not available.
 Please use one of the following commands to obtain it:" >&2
             if [[ ${image_tag%%-*} == "arm"* ]]; then
-                echo -e "       ${Blu}docker pull ${Gre}$LATEX_ARM_IMAGE_NAME:$image_tag${RCol}" >&2
+                echo -e "       ${Blu}$engine pull ${Gre}$LATEX_ARM_IMAGE_NAME:$image_tag${RCol}" >&2
             else
-                echo -e "        ${Blu}docker pull ${Gre}$LATEX_IMAGE_NAME:$image_tag${RCol}
+                echo -e "        ${Blu}$engine pull ${Gre}$LATEX_IMAGE_NAME:$image_tag${RCol}
         ${Blu}docker pull ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${RCol}" >&2
             fi
             exit $EXIT_FAILURE
@@ -162,12 +179,19 @@ Please use one of the following commands to obtain it:" >&2
     fi
 fi
 
+# Build the the main command. This rather complcated way is because the --user option breaks file access on podman.
+# For reference see: https://github.com/containers/libpod/issues/2898
+base_cmd="$engine run --rm --interactive \
+    --name=latex_$image_tag --net=none \
+    --volume=$PWD:/home/workdir \
+    --workdir=/home/workdir \
+    -e HOME=/home"
 
-docker run --rm --interactive \
-    --user="$(id --user):$(id --group)" \
-    --name="latex_$image_tag" --net=none \
-    --volume="$PWD":/home/workdir \
-    --workdir="/home/workdir" \
-    -e HOME="/home" \
-    $image_name:$image_tag "$@" || exit $?
+if [[ "$engine" == "docker" ]]; then
+  base_cmd="$base_cmd --user=$(id --user):$(id --group)"
+fi
+
+base_cmd="$base_cmd $image_name:$image_tag $@"
+
+$base_cmd || exit $?
 
