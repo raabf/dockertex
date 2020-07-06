@@ -172,7 +172,7 @@ Please use one of the following commands to obtain it:" >&2
                 echo -e "       ${Blu}$engine pull ${Gre}$LATEX_ARM_IMAGE_NAME:$image_tag${RCol}" >&2
             else
                 echo -e "        ${Blu}$engine pull ${Gre}$LATEX_IMAGE_NAME:$image_tag${RCol}
-        ${Blu}docker pull ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${RCol}" >&2
+        ${Blu}$engine pull ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${RCol}" >&2
             fi
             exit $EXIT_FAILURE
         fi
