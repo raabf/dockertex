@@ -23,11 +23,13 @@ TEXSTUDIO_IMAGE_NAME="raabf/texstudio-versions"
 
 # Check which container engine to use. Prefer podman since distros (e.g. Fedora) start to deprecate docker.
 if [[ -z $DOCKERTEX_ENGINE ]]; then
-  if hash podman; then
-    engine=podman
-  elif hash docker; then
-    engine=docker
-  fi
+    if hash podman; then
+        engine=podman
+    elif hash docker; then
+        engine=docker
+    fi
+else
+    engine="${DOCKERTEX_ENGINE}"
 fi
 
 image_tag="${DOCKERTEX_DEFAULT_TAG}"
@@ -148,6 +150,11 @@ if (( $# < 1 )) ; then
  usage $EXIT_FAILURE
 fi
 
+if [[ -z $engine ]]; then
+    echo -e "${Red}No supported engine found!${RCol}" >&2
+    echo -e "${Red}Install either docker or podman, or set the correct path to${RCol}" >&2
+    echo -e "${Red}the binaries with the DOCKERTEX_ENGINE variable or --engine option.${RCol}" >&2
+fi
 
 ####### Commands ######
 
