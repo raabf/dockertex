@@ -225,6 +225,7 @@ First you have to register a [runner](https://docs.gitlab.com/runner/) at one of
 Then add the CI configuration file `.gitlab-ci.yml` to your git root. Use the following one as a template:
 
 ```yaml
+---
 stages:
   - latex
 
@@ -241,7 +242,7 @@ make_texlive2016:
     - make all
   artifacts:
     paths:
-    - ./thesis.pdf
+      - ./thesis.pdf
     expire_in: 1 week
 
 
@@ -256,7 +257,7 @@ make_texlive2017:
     - make all
   artifacts:
     paths:
-    - ./thesis.pdf
+      - ./thesis.pdf
     expire_in: 1 week
 
 make_texlive2015:
@@ -268,7 +269,7 @@ make_texlive2015:
     - make all
   artifacts:
     paths:
-    - ./thesis.pdf
+      - ./thesis.pdf
     expire_in: 1 week
 ```
 
