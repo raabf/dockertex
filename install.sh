@@ -210,7 +210,7 @@ else
     bin_prefix=${arg_bin_prefix:-$home_bin_prefix}
 fi
 
-# copy sctipts
+# copy scripts
 copy_or_download "$SCRIPTPATH/bin/dockertex.sh" \
     "$bin_prefix/dockertex" "$DOCKERTEX_SH_URL"
 
