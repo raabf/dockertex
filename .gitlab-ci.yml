@@ -1,0 +1,31 @@
+stages:
+  - latex
+
+.build-latex:
+  stage: latex
+  tags: ['DOCKER']
+  before_script:
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY_DOMAIN
+
+  script:
+    - ./latex/scripts/build.sh
+    - ./latex/scripts/aliastag.sh
+
+  variables:
+    DOCKERFILE_PATH: ./latex/ge-jessie.Dockerfile
+    DOCKER_REGISTRY_DOMAIN: docker.io
+    DOCKER_REGISTRY_REPO: raabf/latex-versions
+    DOCKER_REGISTRY_USER: raabf
+    PUSH_ENABLED: 'false'
+
+foobar:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: foobar
+  when: manual
+
+focal:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: focal
+  when: manual
