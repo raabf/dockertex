@@ -17,7 +17,7 @@ declare -A pkgmap # Additional per distribution packages
 declare -A debmap # Additional repository line for apt/sources.list
 
 #                                                          For ubuntu in debmap it would be “http://archive.ubuntu.com/ubuntu/ trusty multiverse”, but it is already activated
-versionmap[foobar]="1700";  basemap[buster]="debian:buster";   pkgmap[buster]="python3-pygments"; debmap[buster]="deb http://deb.debian.org/debian/ buster contrib non-free"
+versionmap[foobar]="1700";  basemap[foobar]="debian:buster";   pkgmap[foobar]="python3-pygments"; debmap[foobar]="deb http://deb.debian.org/debian/ buster contrib non-free"
 versionmap[wheezy]="2012";  basemap[wheezy]="debian:wheezy";   pkgmap[wheezy]="python-pygments";  debmap[wheezy]="deb http://deb.debian.org/debian/ wheezy contrib non-free"
 versionmap[trusty]="2013";  basemap[trusty]="ubuntu:trusty";   pkgmap[trusty]="python-pygments";  debmap[trusty]=""
 versionmap[jessie]="2014";  basemap[jessie]="debian:jessie";   pkgmap[jessie]="python-pygments";  debmap[jessie]="deb http://deb.debian.org/debian/ jessie contrib non-free"
