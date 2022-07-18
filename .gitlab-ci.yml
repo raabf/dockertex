@@ -1,5 +1,29 @@
 stages:
+  - pre_clean
   - latex
+  - post_clean
+
+pre_clean:
+  stage: pre_clean
+  tags: ['DOCKER']
+  script:
+    - docker image prune -a
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: on_success
+    - when: never
+
+post_clean:
+  stage: post_clean
+  tags: ['DOCKER']
+  script:
+    - docker image prune
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - when: always
 
 .build-latex:
   stage: latex
@@ -19,14 +43,19 @@ stages:
     DOCKER_REGISTRY_USER: raabf
     PUSH_ENABLED: 'false'
 
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: on_success
+    - when: manual
+
 foobar:
   extends: .build-latex
   variables: 
     IMAGE_TAG: foobar
-  when: manual
 
 focal:
   extends: .build-latex
   variables: 
     IMAGE_TAG: focal
-  when: manual

@@ -25,7 +25,7 @@ versionmap[xenial]="2015";  basemap[xenial]="ubuntu:xenial";   pkgmap[xenial]="p
 versionmap[stretch]="2016"; basemap[stretch]="debian:stretch"; pkgmap[stretch]="python-pygments"; debmap[stretch]="deb http://deb.debian.org/debian/ stretch contrib non-free"
 versionmap[bionic]="2017";  basemap[bionic]="ubuntu:bionic";   pkgmap[bionic]="python-pygments";  debmap[bionic]=""
 versionmap[buster]="2018";  basemap[buster]="debian:buster";   pkgmap[buster]="python3-pygments"; debmap[buster]="deb http://deb.debian.org/debian/ buster contrib non-free"
-versionmap[focal]="2019";     basemap[focal]="ubuntu:focal";         pkgmap[focal]="python3-pygments";    debmap[focal]=""
+versionmap[focal]="2019";   basemap[focal]="ubuntu:focal";     pkgmap[focal]="python3-pygments";  debmap[focal]=""
 versionmap[sid]="2020";     basemap[sid]="debian:sid";         pkgmap[sid]="python3-pygments";    debmap[sid]="deb http://deb.debian.org/debian/ unstable contrib non-free"
 
 basemap[armhf-jessie]="multiarch/debian-debootstrap:armhf-jessie";   basemap[arm64-jessie]="multiarch/debian-debootstrap:arm64-jessie";   
