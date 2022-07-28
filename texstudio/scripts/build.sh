@@ -19,6 +19,8 @@ echo "build.sh hook: TEXSTUDIO_VERSION_QT5 '$TEXSTUDIO_VERSION_QT5'"
 echo "build.sh hook: TEXSTUDIO_VERSION_QT5_DEBIAN9 '$TEXSTUDIO_VERSION_QT5_DEBIAN9'"
 echo "build.sh hook: TEXSTUDIO_VERSION_QT5_DEBIAN10 '$TEXSTUDIO_VERSION_QT5_DEBIAN10'"
 
+FINAL_IMAGE_NAME=${IMAGE_NAME:-$DOCKER_REGISTRY_DOMAIN/$DOCKER_REGISTRY_REPO}
+
 docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
             --build-arg VCS_REF=$(git rev-parse --short HEAD) \
             --build-arg TEXSTUDIO_VERSION_QT4="$TEXSTUDIO_VERSION_QT4" \
