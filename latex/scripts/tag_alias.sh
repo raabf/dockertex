@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "--tag_alias.sh hook called--"
+echo "--tag_alias.sh script called--"
 echo "tag_alias.sh: IMAGE_NAME '$IMAGE_NAME'"
 echo "tag_alias.sh: DOCKERFILE_PATH '$DOCKERFILE_PATH'"
 echo "tag_alias.sh: CACHE_TAG '$CACHE_TAG'"
@@ -20,9 +20,9 @@ aliasmap[jessie]="texlive2014"
 aliasmap[xenial]="texlive2015"
 aliasmap[stretch]="texlive2016 latest"
 aliasmap[bionic]="texlive2017"
-aliasmap[buster]="texlive2018 testing"
-aliasmap[sid]="texlive2019"
-
+aliasmap[buster]="texlive2018"
+aliasmap[focal]="texlive2019 testing"
+aliasmap[sid]="texlive2020"
 
 array=( $(echo ${aliasmap[${IMAGE_TAG##*-}]}) )
 echo "tag_alias.sh: use alias list '${array[@]}'"
@@ -31,6 +31,12 @@ FINAL_IMAGE_NAME=${IMAGE_NAME:-$DOCKER_REGISTRY_DOMAIN/$DOCKER_REGISTRY_REPO}
 
 for aliastag in ${array[@]}; do
     
+	if [[ ${IMAGE_TAG%%-*} == "arm"* ]]; then
+		# Prefix the alias tag with the architecture if not x86 (e.g armhf-texlive2017)
+		aliastag="${IMAGE_TAG%%-*}-${aliastag}"
+	fi
+
+
     echo "tag_alias.sh: tag '$FINAL_IMAGE_NAME:$aliastag'"
     docker tag "$FINAL_IMAGE_NAME:$IMAGE_TAG" "$FINAL_IMAGE_NAME:$aliastag"
 
