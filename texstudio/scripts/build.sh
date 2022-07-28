@@ -27,8 +27,8 @@ docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
             --build-arg TEXSTUDIO_VERSION_QT5="$TEXSTUDIO_VERSION_QT5" \
             --build-arg TEXSTUDIO_VERSION_QT5_DEBIAN9="$TEXSTUDIO_VERSION_QT5_DEBIAN9" \
             --build-arg TEXSTUDIO_VERSION_QT5_DEBIAN10="$TEXSTUDIO_VERSION_QT5_DEBIAN10" \
-            --file "$DOCKERFILE_PATH" --tag "$FINAL_IMAGE_NAME:$IMAGE_TAG" .
+            --file "$DOCKERFILE_PATH" --tag "$FINAL_IMAGE_NAME:$IMAGE_TAG" . || exit $?
 
 if [[ "$PUSH_ENABLED" == 'true' ]]; then
-    docker push "$FINAL_IMAGE_NAME:$IMAGE_TAG"
+    docker push "$FINAL_IMAGE_NAME:$IMAGE_TAG" || exit $?
 fi

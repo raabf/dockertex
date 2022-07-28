@@ -32,11 +32,11 @@ FINAL_IMAGE_NAME=${IMAGE_NAME:-$DOCKER_REGISTRY_DOMAIN/$DOCKER_REGISTRY_REPO}
 for aliastag in ${array[@]}; do
     
     echo "tag_alias.sh: tag '$FINAL_IMAGE_NAME:$aliastag'"
-    docker tag "$FINAL_IMAGE_NAME:$IMAGE_TAG" "$FINAL_IMAGE_NAME:$aliastag"
+    docker tag "$FINAL_IMAGE_NAME:$IMAGE_TAG" "$FINAL_IMAGE_NAME:$aliastag" || exit $?
 
 	if [[ "$PUSH_ENABLED" == 'true' ]]; then
 		echo "tag_alias.sh: push '$FINAL_IMAGE_NAME:$aliastag'"
-	    docker push $FINAL_IMAGE_NAME:$aliastag
+	    docker push $FINAL_IMAGE_NAME:$aliastag || exit $?
 	fi
 
 done

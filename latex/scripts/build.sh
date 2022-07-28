@@ -46,8 +46,8 @@ docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
              --build-arg TEXLIVE_VERSION="${versionmap[${IMAGE_TAG##*-}]}" \
              --build-arg PACKAGES_INSTALL="${pkgmap[${IMAGE_TAG##*-}]}" \
              --build-arg DEBLINE="${debmap[${IMAGE_TAG##*-}]}" \
-             --file "$DOCKERFILE_PATH" --tag "$FINAL_IMAGE_NAME:$IMAGE_TAG" .
+             --file "$DOCKERFILE_PATH" --tag "$FINAL_IMAGE_NAME:$IMAGE_TAG" . || exit $?
 
 if [[ "$PUSH_ENABLED" == 'true' ]]; then
-    docker push "$FINAL_IMAGE_NAME:$IMAGE_TAG"
+    docker push "$FINAL_IMAGE_NAME:$IMAGE_TAG" || exit $?
 fi
