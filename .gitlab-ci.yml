@@ -26,6 +26,11 @@ post_clean:
       when: never
     - when: always
 
+
+#############################
+###        Base           ###
+#############################
+
 .base-build:
   before_script:
     - test -z "$DOCKER_REGISTRY_PASSWORD" && echo "Provided empty password. Make sure DOCKER_REGISTRY_PASSWORD is set."
@@ -68,17 +73,47 @@ post_clean:
     DOCKER_REGISTRY_REPO: raabf/texstudio-versions
 
 
+#############################
+###        Latex          ###
+#############################
 
-l-foobar:
+l-bullseye:
   extends: .build-latex
   variables: 
-    IMAGE_TAG: foobar
+    IMAGE_TAG: bullseye
 
-
-t-foobar:
-  extends: .build-texstudio
-  needs: [ 'l-foobar' ]
+l-jammy:
+  extends: .build-latex
   variables: 
-    IMAGE_TAG: foobar
-    DOCKERFILE_PATH: ./texstudio/debian-foobar.Dockerfile
+    IMAGE_TAG: jammy
 
+l-bookworm:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: bookworm
+
+
+#############################
+###      Texstudio        ###
+#############################
+
+t-bullseye:
+  extends: .build-texstudio
+  needs: [ 'l-bullseye' ]
+  variables: 
+    IMAGE_TAG: bullseye
+    DOCKERFILE_PATH: ./texstudio/debian-bullseye.Dockerfile
+
+t-jammy:
+  extends: .build-texstudio
+  needs: [ 'l-jammy' ]
+  variables: 
+    IMAGE_TAG: jammy
+    DOCKERFILE_PATH: ./texstudio/debian-jammy.Dockerfile
+
+t-bookworm:
+  extends: .build-texstudio
+  needs: [ 'l-bookworm' ]
+  variables: 
+    IMAGE_TAG: bookworm
+    DOCKERFILE_PATH: ./texstudio/debian-bookworm.Dockerfile
