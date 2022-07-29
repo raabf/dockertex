@@ -37,7 +37,7 @@ Both images are automatically rebuilt on Dockerhub when the Debian or Ubuntu bas
 
 ## 🏆 Features
 
-  + 💯 The only latex docker which provides different texlive versions — all from 2012–2018!
+  + 💯 The only latex docker which provides different texlive versions — all from 2012 onwards!
   + 🐧 Uses Linux Debian and Ubuntu as backend.
   + 🏙 Complete latex package (texlive-full), which includes every latex module you normally need.
   + 📽 [TeXstudio](https://www.texstudio.org/)  GUI can be started in all containers.
