@@ -129,6 +129,12 @@ The configuration of TexStudio in the containers and among the containers is pre
 
 **LanguageTool** [LanguageTool](https://languagetool.org/) is an advanced tool for grammar checking. It can be accessed via its HTTP API. `dockertexstudio` shares its network interface with the host system, so you can lunch LanguageTool on your host’s localhost interface (which is the default configuration for LanguageTool, so just start it normally) and `dockertexstudio` will be able to access it.
 
+**x11docker** The image basically also works with [`x11docker`](https://github.com/mviereck/x11docker), just call for example
+
+    x11docker --network=host --share $HOME raabf/texstudio-versions:texlive2019
+
+You might want that because of its security features, or because it works better for you.
+
 ## 🪠 TexStudio Display Troubleshooting
 
 ### Authorization required
@@ -156,6 +162,12 @@ This might be environment specific and I do not know the conditions for that.
 ### Remove Network
 
 A [user reported](https://gitlab.com/raabf/dockertex/-/issues/1#note_196754578) that it helps to remove the shared network by removing the line `--network=host` in `dockertexstudio.sh`. However, TexStudio then cannot access network resources like Laguagetool.
+
+### x11docker
+
+You might try [`x11docker`](https://github.com/mviereck/x11docker) instead of `dockertexstudio.sh`, which can setup GUI apps in containers. For example, you can call
+
+    x11docker --network=host --share $HOME raabf/texstudio-versions:texlive2019
 
 ### More resources
 
