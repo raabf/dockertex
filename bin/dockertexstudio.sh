@@ -152,10 +152,10 @@ echo "XDG_RUNTIME_DIR = $XDG_RUNTIME_DIR"
 
 docker run --rm \
     --cap-drop=all \
-    --net=host \
+    --network=host \
     --volume=/tmp/.X11-unix:/tmp/.X11-unix \
     --user="$(id --user):$(id --group)" \
-    -e DISPLAY=unix$DISPLAY \
+    --env='DISPLAY' \
     -e XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
     --volume=$TEXSTUDIO_CONFIG_PATH:/home/.config/texstudio \
     --volume=$XDG_RUNTIME_DIR:$XDG_RUNTIME_DIR \
@@ -163,4 +163,4 @@ docker run --rm \
     -e HOME=/home/ \
     --name=texstudio_$image_tag --workdir=/home/ \
     $TEXSTUDIO_IMAGE_NAME:$image_tag texstudio "$@" || exit $?
-
+    
