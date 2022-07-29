@@ -22,6 +22,7 @@ Both images are automatically rebuilt on Dockerhub when the Debian or Ubuntu bas
 + [🖱 Usage](#-usage)
   - [📓 dockertex](#-dockertex)
   - [📽 dockertexstudio](#-dockertexstudio)
++ [🪠 TexStudio Display Troubleshooting](#-texstudio-display-troubleshooting)
 + [🛠 Installation](#-installation)
   - [👔 zsh plugin manager](#-zsh-plugin-manager)
     * [zplug](#zplug)
@@ -44,10 +45,9 @@ Both images are automatically rebuilt on Dockerhub when the Debian or Ubuntu bas
   + 🎎 Preserves your ownership (user and group ID) of all your files which get pushed or created by the docker container.
   + 👷 Easy installation via script or shell plugin-manager.
   + 🗃 Menu entries for TeXstudio of all installed texlive versions.
-  + 🖥 The TexStudio GUI runs directly on your local X-server via shared sockets (no ssh X-forwarding or something like that).
+  + 🖥 The TexStudio GUI runs directly on your local X-server via shared sockets (no ssh X-forwarding or something like that). Please see [Troubleshooting](#-texstudio-display-troubleshooting) on problems.
   + 📍 The TexStudio’s “Go to PDF” and ‘’Go to Source Code” are working as well as the [LanguageTool](https://languagetool.org/) integration.
   + 🦫 Supports also [Podman](https://podman.io/) instead of docker CLI.
-
 
 
 ## 🏷 Supported tags
@@ -58,19 +58,17 @@ To specify your texlive version you can either use the texlive tag (texlive2012,
 |----------:|:------------|--------:|:------------|:-----------------|:--------------------------------------|
 |    v2012 | texlive2012 |  Debian | wheezy      | [![Latex Dockerfile](https://img.shields.io/badge/📓-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/debian-wheezy.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-wheezy.Dockerfile "TeXstudio Dockerfile") | EOL²; last TeXstudio¹: 2.12.10-2         |
 |    v2013 | texlive2013 |  Ubuntu | trusty      | [![Latex Dockerfile](https://img.shields.io/badge/📓-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ubuntu-trusty.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/ubuntu-trusty.Dockerfile "TeXstudio Dockerfile") | EOL²                                     |
-|    v2014 | texlive2014 armhf-texlive2014        |  Debian | jessie armhf-jessie               | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-jessie.Dockerfile "TeXstudio Dockerfile") |                                       | EOL²
-|    v2015 | texlive2015 armhf-texlive2015 arm64-texlive2015 |  Ubuntu | xenial armhf-xenial arm64-xenial     | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile")  [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/ubuntu-xenial.Dockerfile "TeXstudio Dockerfile") |                                       | EOL²
+|    v2014 | texlive2014 armhf-texlive2014        |  Debian | jessie armhf-jessie               | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-jessie.Dockerfile "TeXstudio Dockerfile") | EOL²                                      | 
+|    v2015 | texlive2015 armhf-texlive2015 arm64-texlive2015 |  Ubuntu | xenial armhf-xenial arm64-xenial     | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile")  [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/ubuntu-xenial.Dockerfile "TeXstudio Dockerfile") | EOL²                                      | 
 |    v2016 | texlive2016 armhf-texlive2016 arm64-texlive2016 |  Debian | stretch armhf-stretch arm64-stretch   | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-stretch.Dockerfile "TeXstudio Dockerfile") | [![Current latest-tag](https://img.shields.io/badge/🏷-latest-yellow.svg "Current latest-tag")](https://microbadger.com/images/raabf/latex-versions:latest) [![Current armhf-latest tag](https://img.shields.io/badge/🏷-armhf%20latest-yellow.svg "Current armhf-latest tag")](https://microbadger.com/images/raabf/latex-versions-arm:armhf-latest) [![Current arm64-latest tag](https://img.shields.io/badge/🏷-arm64%20latest-yellow.svg "Current arm64-latest tag")](https://microbadger.com/images/raabf/latex-versions-arm:arm64-latest) |
-|    v2017 | texlive2017 armhf-texlive2017 arm64-texlive2017 |  Ubuntu | bionic armhf-bionic arm64-bionic     | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-bionic.Dockerfile "TeXstudio Dockerfile") | no texstudio³ |
-|    v2018 | texlive2018 armhf-texlive2018 arm64-texlive2018 |  Debian | buster armhf-buster arm64-buster     | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-buster.Dockerfile "TeXstudio Dockerfile") | no texstudio³ [![Current testing-tag](https://img.shields.io/badge/🏷-testing-yellow.svg "Current testing-tag")](https://microbadger.com/images/raabf/latex-versions:testing) |
-|    v2019 | texlive2019 armhf-texlive2019 arm64-texlive2019 |  Ubuntu | focal armhf-focal arm64-focal     | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-focal.Dockerfile "TeXstudio Dockerfile") | no texstudio³ |
-|    v2020 | texlive2020 armhf-texlive2020 arm64-texlive2020 |  Debian | sid armhf-sid arm64-sid | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-sid.Dockerfile "TeXstudio Dockerfile") | in development; no texstudio³ |
+|    v2017 | texlive2017 armhf-texlive2017 arm64-texlive2017 |  Ubuntu | bionic armhf-bionic arm64-bionic     | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-bionic.Dockerfile "TeXstudio Dockerfile") | |
+|    v2018 | texlive2018 armhf-texlive2018 arm64-texlive2018 |  Debian | buster armhf-buster arm64-buster     | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-buster.Dockerfile "TeXstudio Dockerfile") | [![Current testing-tag](https://img.shields.io/badge/🏷-testing-yellow.svg "Current testing-tag")](https://microbadger.com/images/raabf/latex-versions:testing) |
+|    v2019 | texlive2019 armhf-texlive2019 arm64-texlive2019 |  Ubuntu | focal armhf-focal arm64-focal     | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-focal.Dockerfile "TeXstudio Dockerfile") |  |
+|    v2020 | texlive2020 armhf-texlive2020 arm64-texlive2020 |  Debian | sid armhf-sid arm64-sid | [![Latex Dockerfile](https://img.shields.io/badge/📓📱-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/latex/ge-jessie.Dockerfile "Latex Dockerfile") [![TeXstudio Dockerfile](https://img.shields.io/badge/📽-Dfile-orange.svg)](https://gitlab.com/raabf/dockertex/blob/master/texstudio/debian-sid.Dockerfile "TeXstudio Dockerfile") | in development |
 
 ¹ TeXstudio does not provide builds for this Linux distribution version any more. The container is build with the last available TeXstudio version.
 
 ² The distribution release reached End Of Life, so there aren’t any updates any more. However, the docker image should still work.
-
-³ The X-server sharing seems to not work any more for ubuntu bionic or later. I do no found any info nor a solution for that; see [issue #1](https://gitlab.com/raabf/dockertex/issues/1). Hence the latest tag keeps at stretch until it is working again, even if bionic is the latest stable distribution. Tell me your experience or if you have some new information on that.
 
 
 
@@ -131,6 +129,37 @@ The configuration of TexStudio in the containers and among the containers is pre
 
 **LanguageTool** [LanguageTool](https://languagetool.org/) is an advanced tool for grammar checking. It can be accessed via its HTTP API. `dockertexstudio` shares its network interface with the host system, so you can lunch LanguageTool on your host’s localhost interface (which is the default configuration for LanguageTool, so just start it normally) and `dockertexstudio` will be able to access it.
 
+## 🪠 TexStudio Display Troubleshooting
+
+### Authorization required
+
+When using `docker` and you get
+
+    Authorization required, but no authorization protocol specified
+
+you need to run
+
+    xhost local:root
+
+on your host. The problem is that docker runs all container as root, who is by default
+not allowed to access XServer of your local running user. However, the `xhost` command
+can allow that.
+### Further Authentication
+
+If he still wants more authentication, you might need to pass a token generated by `xauth list` from the host to the guest, so that the guest can connect to the XServer on the host. I did not tested that yet, see [here](https://gitlab.com/raabf/dockertex/-/issues/1#note_1044600240).
+
+### DISPLAY variable
+
+If he complains that the Display is not found, you might have to replace in the `dockertexstudio.sh` script `--env='DISPLAY'` with `-e DISPLAY=unix$DISPLAY`.
+This might be environment specific and I do not know the conditions for that.
+
+### Remove Network
+
+A [user reported](https://gitlab.com/raabf/dockertex/-/issues/1#note_196754578) that it helps to remove the shared network by removing the line `--network=host` in `dockertexstudio.sh`. However, TexStudio then cannot access network resources like Laguagetool.
+
+### More resources
+
+In [this issue](https://gitlab.com/raabf/dockertex/-/issues/1) you find some more hints and links, which might have solutions.
 
 ## 🛠 Installation
 
