@@ -22,7 +22,9 @@ aliasmap[stretch]="texlive2016 latest"
 aliasmap[bionic]="texlive2017"
 aliasmap[buster]="texlive2018"
 aliasmap[focal]="texlive2019 testing"
-aliasmap[sid]="texlive2020"
+aliasmap[bullseye]="texlive2020"
+aliasmap[jammy]="texlive2021"
+aliasmap[bookworm]="texlive2022"
 
 array=( $(echo ${aliasmap[${IMAGE_TAG##*-}]}) )
 echo "tag_alias.sh: use alias list '${array[@]}'"

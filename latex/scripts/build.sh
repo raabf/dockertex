@@ -26,7 +26,9 @@ versionmap[stretch]="2016"; basemap[stretch]="debian:stretch"; pkgmap[stretch]="
 versionmap[bionic]="2017";  basemap[bionic]="ubuntu:bionic";   pkgmap[bionic]="python-pygments";  debmap[bionic]=""
 versionmap[buster]="2018";  basemap[buster]="debian:buster";   pkgmap[buster]="python3-pygments"; debmap[buster]="deb http://deb.debian.org/debian/ buster contrib non-free"
 versionmap[focal]="2019";   basemap[focal]="ubuntu:focal";     pkgmap[focal]="python3-pygments";  debmap[focal]=""
-versionmap[sid]="2020";     basemap[sid]="debian:sid";         pkgmap[sid]="python3-pygments";    debmap[sid]="deb http://deb.debian.org/debian/ unstable contrib non-free"
+versionmap[bullseye]="2020";     basemap[bullseye]="debian:bullseye";         pkgmap[bullseye]="python3-pygments";    debmap[bullseye]="deb http://deb.debian.org/debian/ bullseye contrib non-free"
+versionmap[jammy]="2021";   basemap[jammy]="ubuntu:jammy";     pkgmap[jammy]="python3-pygments";  debmap[jammy]=""
+versionmap[bookworm]="2022";     basemap[bookworm]="debian:bookworm";         pkgmap[bookworm]="python3-pygments";    debmap[bookworm]="deb http://deb.debian.org/debian/ bookworm contrib non-free"
 
 basemap[armhf-jessie]="multiarch/debian-debootstrap:armhf-jessie";   basemap[arm64-jessie]="multiarch/debian-debootstrap:arm64-jessie";   
 basemap[armhf-xenial]="multiarch/ubuntu-debootstrap:armhf-xenial";   basemap[arm64-xenial]="multiarch/ubuntu-debootstrap:arm64-xenial";   

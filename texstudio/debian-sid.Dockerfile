@@ -27,11 +27,9 @@ LABEL maintainer="Fabian Raab <fabian@raab.link>" \
 ENV DEBIAN_FRONTEND noninteractive
 
 # for the modern KDE Plasma look (configurable in texstudio options)
-# not available in experimental yet
 # xauth: authenticate between guest and host
 RUN apt-get update && \
-    apt-get install --quiet --yes xauth
-#    apt-get install --quiet --yes kde-style-breeze
+    apt-get install --quiet --yes xauth kde-style-breeze
 
 # install texstudio
 # (A newer version from the developer, since the version in the
