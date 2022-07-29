@@ -3,6 +3,7 @@
 
 ![docker automated](https://img.shields.io/docker/automated/raabf/latex-versions.svg) 
 ![maintained](https://img.shields.io/maintenance/yes/2022.svg) 
+![Pipline](https://gitlab.com/raabf/dockertex/badges/master/pipeline.svg) 
 [![licence](https://img.shields.io/github/license/raabf/dockertex.svg)](https://gitlab.com/raabf/dockertex/blob/master/LICENSE) 
 
 
