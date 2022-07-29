@@ -15,6 +15,8 @@
 
 Both images are automatically rebuilt on Dockerhub when the Debian or Ubuntu base images change (they do on average each once per month).
 
+📵 ARM variants: Docker does not provide free builds on dockerhub any more, so I need an new infrastructure and hence the ARM variants are currently not building.
+
 ## 📑️ Table of Contents
 <!-- MarkdownTOC -->
 
