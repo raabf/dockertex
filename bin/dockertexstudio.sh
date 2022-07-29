@@ -148,7 +148,38 @@ use the following command to obtain it:
     exit $EXIT_FAILURE
 fi
 
-echo "XDG_RUNTIME_DIR = $XDG_RUNTIME_DIR"
+# Error message when root is not allowed to access X Server:
+# “
+# XDG_RUNTIME_DIR = /run/user/1000
+# Authorization required, but no authorization protocol specified
+# qt.qpa.xcb: could not connect to display :0
+# qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
+# This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+#
+# Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, xcb.
+# ”
+# then run `xhost local:root`
+# See https://baireuther.de/lhb/verbindung-zum-x-server-fur-root-erlauben/
+
+# I needed Before ~2019 `-e DISPLAY=unix$DISPLAY` instead of `-e DISPLAY=$DISPLAY`
+
+# If there are further authorization problems this might help
+#     --volume="$HOME/.Xauthority:/root/.Xauthority:rw"
+# It is used by the command `xauth`, which must be installed on both host and guest!
+# See https://medium.com/theleanprogrammer/run-gui-application-over-docker-86672f55211
+#
+# Just adding above Xauthority volume might not sufficient and you have to add
+# the auth token to Xauthority, which can be scripted
+# See https://blog.yadutaf.fr/2017/09/10/running-a-graphical-app-in-a-docker-container-on-a-remote-server/
+# 
+# This can be done manuallyby calling
+#     xauth list
+# on the host and copy the token of first line which should be something like
+#     x390y/unix:0  MIT-MAGIC-COOKIE-1  9a769b224869f9c82fd33bde730ec2cc
+# to the guest with the command
+# xauth add "9a769b224869f9c82fd33bde730ec2cc"
+# See https://www.howtogeek.com/devops/how-to-run-gui-applications-in-a-docker-container/
+
 
 docker run --rm \
     --cap-drop=all \
