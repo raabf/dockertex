@@ -19,6 +19,18 @@ EXIT_BUG=10
 TEXSTUDIO_IMAGE_NAME="raabf/texstudio-versions"
 TEXSTUDIO_CONFIG_PATH="$HOME/.config/dockertexstudio"
 
+# Check which container engine to use. Prefer podman since distros (e.g. Fedora) start to deprecate docker.
+if [[ -z $DOCKERTEX_ENGINE ]]; then
+    if hash podman; then
+        engine=podman
+    elif hash docker; then
+        engine=docker
+    fi
+else
+    engine="${DOCKERTEX_ENGINE}"
+fi
+
+
 image_tag="${DOCKERTEX_DEFAULT_TAG}"
 volumes=""
 
@@ -67,6 +79,10 @@ ${BRed}OPTIONS:${RCol}
         syntax of ${UGre}mapping${RCol} is the same as in ${Yel}docker run${RCol}. 
         This option can be repeated.
 
+    ${Blu}--engine ${UGre}enginename${RCol}
+        The executable ${UGre}enginename${RCol} will be used to run the container.
+        It defaults to ${Gre}podman${RCol} when it is installed, else ${Gre}docker${RCol}.
+
 ${BRed}EXIT STATUS:${RCol}
     If everything is successfull the script will exit with $EXIT_SUCCESS.
     Failure exit statuses of the script itself are $EXIT_FAILURE, $EXIT_ERROR, and $EXIT_BUG.
@@ -91,6 +107,9 @@ while getopts "$optspec" OPTION ; do
 				    ;;
                 tag)
                     image_tag="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    ;;
+                engine)
+                    engine="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
                 volume)
                     volumes="$volumes --volume=${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
@@ -132,6 +151,11 @@ done
 # jump over consumed arguments
 shift $(( OPTIND - 1 ))
 
+if [[ -z $engine ]]; then
+    echo -e "${Red}No supported engine found!${RCol}" >&2
+    echo -e "${Red}Install either docker or podman, or set the correct path to${RCol}" >&2
+    echo -e "${Red}the binary with the DOCKERTEX_ENGINE variable or --engine option.${RCol}" >&2
+fi
 
 ####### Commands ######
 
@@ -141,10 +165,10 @@ if [ "$image_tag" == "" ]; then
 fi
 
 
-if ! docker inspect --type=image $TEXSTUDIO_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
-    echo -e "${Red}Docker image ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${Red} is locally not available. Please 
+if ! "${engine}" inspect --type=image $TEXSTUDIO_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
+    echo -e "${Red}Container image ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${Red} is locally not available. Please 
 use the following command to obtain it:
-        ${Blu}docker pull ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${RCol}" >&2
+        ${Blu}${engine} pull ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${RCol}" >&2
     exit $EXIT_FAILURE
 fi
 
@@ -180,18 +204,27 @@ fi
 # xauth add "9a769b224869f9c82fd33bde730ec2cc"
 # See https://www.howtogeek.com/devops/how-to-run-gui-applications-in-a-docker-container/
 
-
-docker run --rm \
+echo "engine $engine"
+base_cmd="$engine run --rm \
     --cap-drop=all \
     --network=host \
     --volume=/tmp/.X11-unix:/tmp/.X11-unix \
-    --user="$(id --user):$(id --group)" \
-    --env='DISPLAY' \
-    -e XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
+    --env=DISPLAY \
+    -e XDG_RUNTIME_DIR=\"$XDG_RUNTIME_DIR\" \
     --volume=$TEXSTUDIO_CONFIG_PATH:/home/.config/texstudio \
     --volume=$XDG_RUNTIME_DIR:$XDG_RUNTIME_DIR \
     --volume=$HOME/:$HOME/ $volumes \
     -e HOME=/home/ \
-    --name=texstudio_$image_tag --workdir=/home/ \
-    $TEXSTUDIO_IMAGE_NAME:$image_tag texstudio "$@" || exit $?
-    
+    --name=texstudio_$image_tag --workdir=/home/"
+
+if [[ "$engine" == "docker" ]]; then
+  base_cmd="$base_cmd --user=$(id --user):$(id --group)"
+fi
+
+base_cmd="$base_cmd $TEXSTUDIO_IMAGE_NAME:$image_tag texstudio"
+
+if [ "$@" != "" ]; then
+    base_cmd="$base_cmd \"$@\""
+fi
+
+$base_cmd || exit $?
