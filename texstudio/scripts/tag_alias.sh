@@ -18,13 +18,13 @@ aliasmap[wheezy]="texlive2012"
 aliasmap[trusty]="texlive2013"
 aliasmap[jessie]="texlive2014"
 aliasmap[xenial]="texlive2015"
-aliasmap[stretch]="texlive2016 latest"
+aliasmap[stretch]="texlive2016"
 aliasmap[bionic]="texlive2017"
-aliasmap[buster]="texlive2018 testing"
+aliasmap[buster]="texlive2018"
 aliasmap[focal]="texlive2019"
 aliasmap[bullseye]="texlive2020"
-aliasmap[jammy]="texlive2021"
-aliasmap[bookworm]="texlive2022"
+aliasmap[jammy]="texlive2021 latest"
+aliasmap[bookworm]="texlive2022 testing"
 
 
 array=( $(echo ${aliasmap[${IMAGE_TAG##*-}]}) )
