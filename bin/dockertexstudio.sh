@@ -19,6 +19,18 @@ EXIT_BUG=10
 TEXSTUDIO_IMAGE_NAME="raabf/texstudio-versions"
 TEXSTUDIO_CONFIG_PATH="$HOME/.config/dockertexstudio"
 
+# Check which container engine to use. Prefer podman since distros (e.g. Fedora) start to deprecate docker.
+if [[ -z $DOCKERTEX_ENGINE ]]; then
+    if hash podman; then
+        engine=podman
+    elif hash docker; then
+        engine=docker
+    fi
+else
+    engine="${DOCKERTEX_ENGINE}"
+fi
+
+
 image_tag="${DOCKERTEX_DEFAULT_TAG}"
 volumes=""
 
@@ -67,6 +79,10 @@ ${BRed}OPTIONS:${RCol}
         syntax of ${UGre}mapping${RCol} is the same as in ${Yel}docker run${RCol}. 
         This option can be repeated.
 
+    ${Blu}--engine ${UGre}enginename${RCol}
+        The executable ${UGre}enginename${RCol} will be used to run the container.
+        It defaults to ${Gre}podman${RCol} when it is installed, else ${Gre}docker${RCol}.
+
 ${BRed}EXIT STATUS:${RCol}
     If everything is successfull the script will exit with $EXIT_SUCCESS.
     Failure exit statuses of the script itself are $EXIT_FAILURE, $EXIT_ERROR, and $EXIT_BUG.
@@ -91,6 +107,9 @@ while getopts "$optspec" OPTION ; do
 				    ;;
                 tag)
                     image_tag="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    ;;
+                engine)
+                    engine="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     ;;
                 volume)
                     volumes="$volumes --volume=${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
@@ -132,6 +151,11 @@ done
 # jump over consumed arguments
 shift $(( OPTIND - 1 ))
 
+if [[ -z $engine ]]; then
+    echo -e "${Red}No supported engine found!${RCol}" >&2
+    echo -e "${Red}Install either docker or podman, or set the correct path to${RCol}" >&2
+    echo -e "${Red}the binary with the DOCKERTEX_ENGINE variable or --engine option.${RCol}" >&2
+fi
 
 ####### Commands ######
 
@@ -141,26 +165,66 @@ if [ "$image_tag" == "" ]; then
 fi
 
 
-if ! docker inspect --type=image $TEXSTUDIO_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
-    echo -e "${Red}Docker image ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${Red} is locally not available. Please 
+if ! "${engine}" inspect --type=image $TEXSTUDIO_IMAGE_NAME:$image_tag > /dev/null 2>&1; then
+    echo -e "${Red}Container image ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${Red} is locally not available. Please 
 use the following command to obtain it:
-        ${Blu}docker pull ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${RCol}" >&2
+        ${Blu}${engine} pull ${Gre}$TEXSTUDIO_IMAGE_NAME:$image_tag${RCol}" >&2
     exit $EXIT_FAILURE
 fi
 
-echo "XDG_RUNTIME_DIR = $XDG_RUNTIME_DIR"
+# Error message when root is not allowed to access X Server:
+# “
+# XDG_RUNTIME_DIR = /run/user/1000
+# Authorization required, but no authorization protocol specified
+# qt.qpa.xcb: could not connect to display :0
+# qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
+# This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+#
+# Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, xcb.
+# ”
+# then run `xhost local:root`
+# See https://baireuther.de/lhb/verbindung-zum-x-server-fur-root-erlauben/
 
-docker run --rm \
+# I needed Before ~2019 `-e DISPLAY=unix$DISPLAY` instead of `-e DISPLAY=$DISPLAY`
+
+# If there are further authorization problems this might help
+#     --volume="$HOME/.Xauthority:/root/.Xauthority:rw"
+# It is used by the command `xauth`, which must be installed on both host and guest!
+# See https://medium.com/theleanprogrammer/run-gui-application-over-docker-86672f55211
+#
+# Just adding above Xauthority volume might not sufficient and you have to add
+# the auth token to Xauthority, which can be scripted
+# See https://blog.yadutaf.fr/2017/09/10/running-a-graphical-app-in-a-docker-container-on-a-remote-server/
+# 
+# This can be done manuallyby calling
+#     xauth list
+# on the host and copy the token of first line which should be something like
+#     x390y/unix:0  MIT-MAGIC-COOKIE-1  9a769b224869f9c82fd33bde730ec2cc
+# to the guest with the command
+# xauth add "9a769b224869f9c82fd33bde730ec2cc"
+# See https://www.howtogeek.com/devops/how-to-run-gui-applications-in-a-docker-container/
+
+echo "engine $engine"
+base_cmd="$engine run --rm \
     --cap-drop=all \
-    --net=host \
+    --network=host \
     --volume=/tmp/.X11-unix:/tmp/.X11-unix \
-    --user="$(id --user):$(id --group)" \
-    -e DISPLAY=unix$DISPLAY \
-    -e XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
+    --env=DISPLAY \
+    -e XDG_RUNTIME_DIR=\"$XDG_RUNTIME_DIR\" \
     --volume=$TEXSTUDIO_CONFIG_PATH:/home/.config/texstudio \
     --volume=$XDG_RUNTIME_DIR:$XDG_RUNTIME_DIR \
     --volume=$HOME/:$HOME/ $volumes \
     -e HOME=/home/ \
-    --name=texstudio_$image_tag --workdir=/home/ \
-    $TEXSTUDIO_IMAGE_NAME:$image_tag texstudio "$@" || exit $?
+    --name=texstudio_$image_tag --workdir=/home/"
 
+if [[ "$engine" == "docker" ]]; then
+  base_cmd="$base_cmd --user=$(id --user):$(id --group)"
+fi
+
+base_cmd="$base_cmd $TEXSTUDIO_IMAGE_NAME:$image_tag texstudio"
+
+if [ "$@" != "" ]; then
+    base_cmd="$base_cmd \"$@\""
+fi
+
+$base_cmd || exit $?

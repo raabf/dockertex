@@ -153,7 +153,7 @@ fi
 if [[ -z $engine ]]; then
     echo -e "${Red}No supported engine found!${RCol}" >&2
     echo -e "${Red}Install either docker or podman, or set the correct path to${RCol}" >&2
-    echo -e "${Red}the binaries with the DOCKERTEX_ENGINE variable or --engine option.${RCol}" >&2
+    echo -e "${Red}the binary with the DOCKERTEX_ENGINE variable or --engine option.${RCol}" >&2
 fi
 
 ####### Commands ######

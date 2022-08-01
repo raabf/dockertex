@@ -10,7 +10,7 @@ ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL maintainer="Fabian Raab <fabian@raab.link>" \
-	    texlive_version=$TEXLIVE_VERSION \
+      texlive_version=$TEXLIVE_VERSION \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="dockertex-latex" \
       org.label-schema.description="🐋📓 Latex with multiple texlive versions and proper command line tools 🎈 suitable for CI" \

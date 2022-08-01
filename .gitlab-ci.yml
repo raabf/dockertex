@@ -1,0 +1,168 @@
+stages:
+  - pre_clean
+  - latex
+  - texstudio
+  - post_clean
+
+pre_clean:
+  stage: pre_clean
+  tags: ['DOCKER']
+  script:
+    - docker image prune -a
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: on_success
+    - when: never
+
+post_clean:
+  stage: post_clean
+  tags: ['DOCKER']
+  script:
+    - docker image prune
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - when: always
+
+
+#############################
+###        Base           ###
+#############################
+
+.base-build:
+  before_script:
+    - test -z "$DOCKER_REGISTRY_PASSWORD" && echo "Provided empty password. Make sure DOCKER_REGISTRY_PASSWORD is set."
+    - docker login --username "$DOCKER_REGISTRY_USER" --password "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY_DOMAIN
+  tags: ['DOCKER']
+
+  variables:
+    DOCKER_REGISTRY_DOMAIN: docker.io
+    DOCKER_REGISTRY_USER: raabf
+    PUSH_ENABLED: 'false'
+
+
+.build-latex:
+  extends: .base-build
+  stage: latex
+  script:
+    - ./latex/scripts/build.sh
+    - ./latex/scripts/tag_alias.sh
+
+  variables:
+    DOCKER_REGISTRY_REPO: raabf/latex-versions
+    DOCKERFILE_PATH: ./latex/ge-jessie.Dockerfile
+
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: on_success
+    - when: manual
+
+
+.build-texstudio:
+  extends: .base-build
+  stage: texstudio
+  script:
+    - ./texstudio/scripts/build.sh
+    - ./texstudio/scripts/tag_alias.sh
+  variables:
+    DOCKER_REGISTRY_REPO: raabf/texstudio-versions
+    DOCKERFILE_PATH: ./texstudio/ge-stretch.Dockerfile
+    TEXSTUDIO_VERSION: "4.2.3"
+
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: on_success
+    - when: on_success
+
+#############################
+###        Latex          ###
+#############################
+
+l-stretch:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: stretch
+
+l-bionic:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: bionic
+
+l-buster:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: buster
+
+l-focal:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: focal
+
+l-bullseye:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: bullseye
+
+l-jammy:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: jammy
+
+l-bookworm:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: bookworm
+
+
+#############################
+###      Texstudio        ###
+#############################
+
+t-stretch:
+  extends: .build-texstudio
+  needs: [ 'l-stretch' ]
+  variables: 
+    IMAGE_TAG: stretch
+    TEXSTUDIO_VERSION: "3.1.2"
+
+t-bionic:
+  extends: .build-texstudio
+  needs: [ 'l-bionic' ]
+  variables: 
+    IMAGE_TAG: bionic
+
+t-buster:
+  extends: .build-texstudio
+  needs: [ 'l-buster' ]
+  variables: 
+    IMAGE_TAG: buster
+
+t-focal:
+  extends: .build-texstudio
+  needs: [ 'l-focal' ]
+  variables: 
+    IMAGE_TAG: focal
+
+t-bullseye:
+  extends: .build-texstudio
+  needs: [ 'l-bullseye' ]
+  variables: 
+    IMAGE_TAG: bullseye
+
+t-jammy:
+  extends: .build-texstudio
+  needs: [ 'l-jammy' ]
+  variables: 
+    IMAGE_TAG: jammy
+
+t-bookworm:
+  extends: .build-texstudio
+  needs: [ 'l-bookworm' ]
+  variables: 
+    IMAGE_TAG: bookworm
