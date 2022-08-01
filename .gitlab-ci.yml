@@ -58,8 +58,8 @@ post_clean:
     - ./latex/scripts/tag_alias.sh
 
   variables:
-    DOCKERFILE_PATH: ./latex/ge-jessie.Dockerfile
     DOCKER_REGISTRY_REPO: raabf/latex-versions
+    DOCKERFILE_PATH: ./latex/ge-jessie.Dockerfile
 
 
 .build-texstudio:
@@ -69,8 +69,8 @@ post_clean:
     - ./texstudio/scripts/build.sh
     - ./texstudio/scripts/tag_alias.sh
   variables:
-    DOCKERFILE_PATH: 0
     DOCKER_REGISTRY_REPO: raabf/texstudio-versions
+    DOCKERFILE_PATH: ./texstudio/ge-stretch.Dockerfile
     TEXSTUDIO_VERSION: "4.2.3"
 
 
@@ -103,18 +103,15 @@ t-bullseye:
   needs: [ 'l-bullseye' ]
   variables: 
     IMAGE_TAG: bullseye
-    DOCKERFILE_PATH: ./texstudio/debian-bullseye.Dockerfile
 
 t-jammy:
   extends: .build-texstudio
   needs: [ 'l-jammy' ]
   variables: 
     IMAGE_TAG: jammy
-    DOCKERFILE_PATH: ./texstudio/debian-jammy.Dockerfile
 
 t-bookworm:
   extends: .build-texstudio
   needs: [ 'l-bookworm' ]
   variables: 
     IMAGE_TAG: bookworm
-    DOCKERFILE_PATH: ./texstudio/debian-bookworm.Dockerfile
