@@ -84,40 +84,40 @@ post_clean:
 ###        Latex          ###
 #############################
 
-l-stretch:
-  extends: .build-latex
-  variables: 
-    IMAGE_TAG: stretch
+# l-stretch:
+#   extends: .build-latex
+#   variables: 
+#     IMAGE_TAG: stretch
 
-l-bionic:
-  extends: .build-latex
-  variables: 
-    IMAGE_TAG: bionic
+# l-bionic:
+#   extends: .build-latex
+#   variables: 
+#     IMAGE_TAG: bionic
 
-l-buster:
-  extends: .build-latex
-  variables: 
-    IMAGE_TAG: buster
+# l-buster:
+#   extends: .build-latex
+#   variables: 
+#     IMAGE_TAG: buster
 
-l-focal:
-  extends: .build-latex
-  variables: 
-    IMAGE_TAG: focal
+# l-focal:
+#   extends: .build-latex
+#   variables: 
+#     IMAGE_TAG: focal
 
-l-bullseye:
-  extends: .build-latex
-  variables: 
-    IMAGE_TAG: bullseye
+# l-bullseye:
+#   extends: .build-latex
+#   variables: 
+#     IMAGE_TAG: bullseye
 
-l-jammy:
-  extends: .build-latex
-  variables: 
-    IMAGE_TAG: jammy
+# l-jammy:
+#   extends: .build-latex
+#   variables: 
+#     IMAGE_TAG: jammy
 
-l-bookworm:
-  extends: .build-latex
-  variables: 
-    IMAGE_TAG: bookworm
+# l-bookworm:
+#   extends: .build-latex
+#   variables: 
+#     IMAGE_TAG: bookworm
 
 
 #############################
@@ -126,42 +126,43 @@ l-bookworm:
 
 t-stretch:
   extends: .build-texstudio
-  needs: [ 'l-stretch' ]
+  # needs: [ 'l-stretch' ]
   variables: 
     IMAGE_TAG: stretch
+    TEXSTUDIO_VERSION: "3.1.2"
 
 t-bionic:
   extends: .build-texstudio
-  needs: [ 'l-bionic' ]
+  # needs: [ 'l-bionic' ]
   variables: 
     IMAGE_TAG: bionic
 
 t-buster:
   extends: .build-texstudio
-  needs: [ 'l-buster' ]
+  # needs: [ 'l-buster' ]
   variables: 
     IMAGE_TAG: buster
 
 t-focal:
   extends: .build-texstudio
-  needs: [ 'l-focal' ]
+  # needs: [ 'l-focal' ]
   variables: 
     IMAGE_TAG: focal
 
 t-bullseye:
   extends: .build-texstudio
-  needs: [ 'l-bullseye' ]
+  # needs: [ 'l-bullseye' ]
   variables: 
     IMAGE_TAG: bullseye
 
 t-jammy:
   extends: .build-texstudio
-  needs: [ 'l-jammy' ]
+  # needs: [ 'l-jammy' ]
   variables: 
     IMAGE_TAG: jammy
 
 t-bookworm:
   extends: .build-texstudio
-  needs: [ 'l-bookworm' ]
+  # needs: [ 'l-bookworm' ]
   variables: 
     IMAGE_TAG: bookworm
