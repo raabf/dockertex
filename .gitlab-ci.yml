@@ -42,13 +42,6 @@ post_clean:
     DOCKER_REGISTRY_USER: raabf
     PUSH_ENABLED: 'false'
 
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: on_success
-    - when: manual
-
 
 .build-latex:
   extends: .base-build
@@ -60,6 +53,13 @@ post_clean:
   variables:
     DOCKER_REGISTRY_REPO: raabf/latex-versions
     DOCKERFILE_PATH: ./latex/ge-jessie.Dockerfile
+
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: on_success
+    - when: manual
 
 
 .build-texstudio:
@@ -73,10 +73,36 @@ post_clean:
     DOCKERFILE_PATH: ./texstudio/ge-stretch.Dockerfile
     TEXSTUDIO_VERSION: "4.2.3"
 
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: on_success
+    - when: on_success
 
 #############################
 ###        Latex          ###
 #############################
+
+l-stretch:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: stretch
+
+l-bionic:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: bionic
+
+l-buster:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: buster
+
+l-focal:
+  extends: .build-latex
+  variables: 
+    IMAGE_TAG: focal
 
 l-bullseye:
   extends: .build-latex
@@ -97,6 +123,30 @@ l-bookworm:
 #############################
 ###      Texstudio        ###
 #############################
+
+t-stretch:
+  extends: .build-texstudio
+  needs: [ 'l-stretch' ]
+  variables: 
+    IMAGE_TAG: stretch
+
+t-bionic:
+  extends: .build-texstudio
+  needs: [ 'l-bionic' ]
+  variables: 
+    IMAGE_TAG: bionic
+
+t-buster:
+  extends: .build-texstudio
+  needs: [ 'l-buster' ]
+  variables: 
+    IMAGE_TAG: buster
+
+t-focal:
+  extends: .build-texstudio
+  needs: [ 'l-focal' ]
+  variables: 
+    IMAGE_TAG: focal
 
 t-bullseye:
   extends: .build-texstudio
