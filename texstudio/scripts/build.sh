@@ -29,7 +29,7 @@ declare -A basemap # Base image to build FROM
 declare -A versionmap # The installed texlive version for documentation
 declare -A baseurl # The OS version specific part of the Texstudio download URL
 
-versionmap[stretch]="2016";     basemap[stretch]="raabf/latex-versions:stretch";      baseurl[stretch]="Debian_9/amd64"
+versionmap[stretch]="2016";     basemap[stretch]="raabf/latex-versions:stretch";      baseurl[stretch]="Debian_9.0/amd64"
 versionmap[bionic]="2017";      basemap[bionic]="raabf/latex-versions:bionic";        baseurl[bionic]="xUbuntu_18.04/amd64"
 versionmap[buster]="2018";      basemap[buster]="raabf/latex-versions:buster";        baseurl[buster]="Debian_10/amd64"
 versionmap[focal]="2019";       basemap[focal]="raabf/latex-versions:focal";          baseurl[focal]="xUbuntu_20.04/amd64"
