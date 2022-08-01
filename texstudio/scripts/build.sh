@@ -39,8 +39,8 @@ versionmap[bookworm]="2022";    basemap[bookworm]="raabf/latex-versions:bookworm
 
 URL_PREFIX="http://download.opensuse.org/repositories/home:/jsundermeyer"
 
-filename="$(curl --silent ${URL_PREFIX}/${baseurl[${IMAGE_TAG##*-}]} | grep -o -e "texstudio_${TEXSTUDIO_VERSION}[^\"]*.deb" | head -n 1)"
-echo "Found file name on ${URL_PREFIX}/${baseurl[${IMAGE_TAG##*-}]} : ${filename}"
+filename="$(curl --silent ${URL_PREFIX}/${baseurl[${IMAGE_TAG##*-}]}/ | grep -o -e "texstudio_${TEXSTUDIO_VERSION}[^\"]*.deb" | head -n 1)"
+echo "Found file name on ${URL_PREFIX}/${baseurl[${IMAGE_TAG##*-}]}/ : ${filename}"
 
 full_url="${URL_PREFIX}/${baseurl[${IMAGE_TAG##*-}]}/${filename}"
 echo "Set full download URL to: ${full_url}"
