@@ -71,6 +71,7 @@ post_clean:
   variables:
     DOCKERFILE_PATH: 0
     DOCKER_REGISTRY_REPO: raabf/texstudio-versions
+    TEXSTUDIO_VERSION: "4.2.3"
 
 
 #############################

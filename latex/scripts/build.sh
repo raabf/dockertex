@@ -52,4 +52,4 @@ docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
 
 if [[ "$PUSH_ENABLED" == 'true' ]]; then
     docker push "$FINAL_IMAGE_NAME:$IMAGE_TAG" || exit $?
-fi
+fi  
