@@ -29,13 +29,13 @@ declare -A basemap # Base image to build FROM
 declare -A versionmap # The installed texlive version for documentation
 declare -A baseurl # The OS version specific part of the Texstudio download URL
 
-versionmap[stretch]="2016";     basemap[stretch]="raabf/latex-versions:stretch";      baseurl[stretch]="Debian_9/amd64/"
-versionmap[bionic]="2017";      basemap[bionic]="raabf/latex-versions:bionic";        baseurl[bionic]="xUbuntu_18.04/amd64/"
-versionmap[buster]="2018";      basemap[buster]="raabf/latex-versions:buster";        baseurl[buster]="Debian_10/amd64/"
-versionmap[focal]="2019";       basemap[focal]="raabf/latex-versions:focal";          baseurl[focal]="xUbuntu_20.04/amd64/"
-versionmap[bullseye]="2020";    basemap[bullseye]="raabf/latex-versions:bullseye";    baseurl[bullseye]="Debian_11/amd64/"
-versionmap[jammy]="2021";       basemap[jammy]="raabf/latex-versions:jammy";          baseurl[jammy]="xUbuntu_21.10/amd64/"  # TODO change to xUbuntu_22.04/amd64/ (21.10 is impish)
-versionmap[bookworm]="2022";    basemap[bookworm]="raabf/latex-versions:bookworm";    baseurl[bookworm]="Debian_12/amd64/"
+versionmap[stretch]="2016";     basemap[stretch]="raabf/latex-versions:stretch";      baseurl[stretch]="Debian_9/amd64"
+versionmap[bionic]="2017";      basemap[bionic]="raabf/latex-versions:bionic";        baseurl[bionic]="xUbuntu_18.04/amd64"
+versionmap[buster]="2018";      basemap[buster]="raabf/latex-versions:buster";        baseurl[buster]="Debian_10/amd64"
+versionmap[focal]="2019";       basemap[focal]="raabf/latex-versions:focal";          baseurl[focal]="xUbuntu_20.04/amd64"
+versionmap[bullseye]="2020";    basemap[bullseye]="raabf/latex-versions:bullseye";    baseurl[bullseye]="Debian_11/amd64"
+versionmap[jammy]="2021";       basemap[jammy]="raabf/latex-versions:jammy";          baseurl[jammy]="xUbuntu_21.10/amd64"  # TODO change to xUbuntu_22.04/amd64/ (21.10 is impish)
+versionmap[bookworm]="2022";    basemap[bookworm]="raabf/latex-versions:bookworm";    baseurl[bookworm]="Debian_Testing/amd64"
 
 URL_PREFIX="http://download.opensuse.org/repositories/home:/jsundermeyer"
 
@@ -56,7 +56,6 @@ docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
             --build-arg TEXSTUDIO_VERSION_QT5="$TEXSTUDIO_VERSION_QT5" \
             --build-arg TEXSTUDIO_VERSION_QT5_DEBIAN9="$TEXSTUDIO_VERSION_QT5_DEBIAN9" \
             --build-arg TEXSTUDIO_VERSION_QT5_DEBIAN10="$TEXSTUDIO_VERSION_QT5_DEBIAN10" \
-            --build-arg TEXSTUDIO_VERSION_QT5_DEBIAN11="$TEXSTUDIO_VERSION_QT5_DEBIAN11" \
             --file "$DOCKERFILE_PATH" --tag "$FINAL_IMAGE_NAME:$IMAGE_TAG" . || exit $?
 
 if [[ "$PUSH_ENABLED" == 'true' ]]; then
