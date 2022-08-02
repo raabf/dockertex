@@ -4,7 +4,13 @@ stages:
   - texstudio
   - post
 
+.docker_login:
+  before_script:
+    - test -z "$DOCKER_REGISTRY_PASSWORD" && echo "Provided empty password. Make sure DOCKER_REGISTRY_PASSWORD is set."
+    - docker login --username "$DOCKER_REGISTRY_USER" --password "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY_DOMAIN
+
 push_readme:
+  extends: .docker_login
   stage: pre
   tags: ['DOCKER']
   needs: []
@@ -50,11 +56,8 @@ post_clean:
 #############################
 
 .base-build:
-  before_script:
-    - test -z "$DOCKER_REGISTRY_PASSWORD" && echo "Provided empty password. Make sure DOCKER_REGISTRY_PASSWORD is set."
-    - docker login --username "$DOCKER_REGISTRY_USER" --password "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY_DOMAIN
+  extends: .docker_login
   tags: ['DOCKER']
-
   variables:
     DOCKER_REGISTRY_DOMAIN: docker.io
     DOCKER_REGISTRY_USER: raabf
