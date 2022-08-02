@@ -18,9 +18,9 @@ push_readme:
   tags: ['DOCKER']
   needs: []
   script:
-   - script docker pushrm docker.io/raabf/latex-versions
-   - script docker pushrm docker.io/raabf/raabf/texstudio-versions
-   - script docker pushrm docker.io/raabf/latex-versions-arm
+   - docker pushrm --provider=dockerhub --file="./README.md" $DOCKER_REGISTRY_DOMAIN/raabf/latex-versions
+   - docker pushrm --provider=dockerhub --file="./README.md" $DOCKER_REGISTRY_DOMAIN/raabf/texstudio-versions
+   - docker pushrm --provider=dockerhub --file="./README.md" $DOCKER_REGISTRY_DOMAIN/raabf/latex-versions-arm
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
