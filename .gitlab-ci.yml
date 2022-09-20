@@ -35,7 +35,7 @@ pre_clean:
   stage: pre
   tags: ['DOCKER']
   script:
-    - docker image prune -a
+    - docker image prune --all --force
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
@@ -47,7 +47,7 @@ post_clean:
   stage: post
   tags: ['DOCKER']
   script:
-    - docker image prune
+    - docker image prune --force
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
