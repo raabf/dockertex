@@ -30,16 +30,17 @@ versionmap[bullseye]="2020";     basemap[bullseye]="debian:bullseye";         pk
 versionmap[jammy]="2021";   basemap[jammy]="ubuntu:jammy";     pkgmap[jammy]="python3-pygments";  debmap[jammy]=""
 versionmap[bookworm]="2022";     basemap[bookworm]="debian:bookworm";         pkgmap[bookworm]="python3-pygments";    debmap[bookworm]="deb http://deb.debian.org/debian/ bookworm contrib non-free"
 
-basemap[armhf-jessie]="multiarch/debian-debootstrap:armhf-jessie";   basemap[arm64-jessie]="multiarch/debian-debootstrap:arm64-jessie";   
-basemap[armhf-xenial]="multiarch/ubuntu-debootstrap:armhf-xenial";   basemap[arm64-xenial]="multiarch/ubuntu-debootstrap:arm64-xenial";   
-basemap[armhf-stretch]="multiarch/debian-debootstrap:armhf-stretch"; basemap[arm64-stretch]="multiarch/debian-debootstrap:arm64-stretch"; 
-basemap[armhf-bionic]="multiarch/ubuntu-debootstrap:armhf-bionic";   basemap[arm64-bionic]="multiarch/ubuntu-debootstrap:arm64-bionic";   
-basemap[armhf-buster]="multiarch/debian-debootstrap:armhf-buster";   basemap[arm64-buster]="multiarch/debian-debootstrap:arm64-buster";   
-basemap[armhf-focal]="multiarch/ubuntu-debootstrap:armhf-focal";   basemap[arm64-bionic]="multiarch/ubuntu-debootstrap:arm64-focal";   
-basemap[armhf-sid]="multiarch/debian-debootstrap:armhf-sid";         basemap[arm64-sid]="multiarch/debian-debootstrap:arm64-sid";         
+basemap[armhf-jessie]="multiarch/debian-debootstrap:armhf-jessie";   basemap[arm64-jessie]="multiarch/debian-debootstrap:arm64-jessie";
+basemap[armhf-xenial]="multiarch/ubuntu-debootstrap:armhf-xenial";   basemap[arm64-xenial]="multiarch/ubuntu-debootstrap:arm64-xenial";
+basemap[armhf-stretch]="multiarch/debian-debootstrap:armhf-stretch"; basemap[arm64-stretch]="multiarch/debian-debootstrap:arm64-stretch";
+basemap[armhf-bionic]="multiarch/ubuntu-debootstrap:armhf-bionic";   basemap[arm64-bionic]="multiarch/ubuntu-debootstrap:arm64-bionic";
+basemap[armhf-buster]="multiarch/debian-debootstrap:armhf-buster";   basemap[arm64-buster]="multiarch/debian-debootstrap:arm64-buster";
+basemap[armhf-focal]="multiarch/ubuntu-debootstrap:armhf-focal";   basemap[arm64-bionic]="multiarch/ubuntu-debootstrap:arm64-focal";
+basemap[armhf-sid]="multiarch/debian-debootstrap:armhf-sid";         basemap[arm64-sid]="multiarch/debian-debootstrap:arm64-sid";
 
-
-FINAL_IMAGE_NAME=${IMAGE_NAME:-$DOCKER_REGISTRY_DOMAIN/$DOCKER_REGISTRY_REPO}
+DOCKER_REGISTRY_IMAGE_NAME="${DOCKER_REGISTRY_REPO:+${DOCKER_REGISTRY_DOMAIN:-docker.io}/$DOCKER_REGISTRY_REPO}"
+FINAL_IMAGE_NAME=${IMAGE_NAME:-${DOCKER_REGISTRY_IMAGE_NAME:-latex}}
+echo "build.sh: FINAL_IMAGE_NAME '$FINAL_IMAGE_NAME'"
 
 # $IMAGE_NAME var is injected into the build so the tag is correct.
 docker build --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
@@ -52,4 +53,4 @@ docker build --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
 
 if [[ "$PUSH_ENABLED" == 'true' ]]; then
     docker push "$FINAL_IMAGE_NAME:$IMAGE_TAG" || exit $?
-fi  
+fi

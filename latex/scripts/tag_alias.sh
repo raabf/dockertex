@@ -26,13 +26,16 @@ aliasmap[bullseye]="texlive2020"
 aliasmap[jammy]="texlive2021 latest"
 aliasmap[bookworm]="texlive2022 testing"
 
-array=( $(echo ${aliasmap[${IMAGE_TAG##*-}]}) )
+
+mapfile -t array < <(echo "${aliasmap[${IMAGE_TAG##*-}]}")
 echo "tag_alias.sh: use alias list '${array[@]}'"
 
-FINAL_IMAGE_NAME=${IMAGE_NAME:-$DOCKER_REGISTRY_DOMAIN/$DOCKER_REGISTRY_REPO}
+DOCKER_REGISTRY_IMAGE_NAME="${DOCKER_REGISTRY_REPO:+${DOCKER_REGISTRY_DOMAIN:-docker.io}/$DOCKER_REGISTRY_REPO}"
+FINAL_IMAGE_NAME=${IMAGE_NAME:-${DOCKER_REGISTRY_IMAGE_NAME:-latex}}
+echo "tag_alias.sh: FINAL_IMAGE_NAME '$FINAL_IMAGE_NAME'"
 
 for aliastag in ${array[@]}; do
-    
+
 	if [[ ${IMAGE_TAG%%-*} == "arm"* ]]; then
 		# Prefix the alias tag with the architecture if not x86 (e.g armhf-texlive2017)
 		aliastag="${IMAGE_TAG%%-*}-${aliastag}"

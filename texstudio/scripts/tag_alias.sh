@@ -26,14 +26,15 @@ aliasmap[bullseye]="texlive2020"
 aliasmap[jammy]="texlive2021 latest"
 aliasmap[bookworm]="texlive2022 testing"
 
-
-array=( $(echo ${aliasmap[${IMAGE_TAG##*-}]}) )
+mapfile -t array < <(echo "${aliasmap[${IMAGE_TAG##*-}]}")
 echo "tag_alias.sh: use alias list '${array[@]}'"
 
-FINAL_IMAGE_NAME=${IMAGE_NAME:-$DOCKER_REGISTRY_DOMAIN/$DOCKER_REGISTRY_REPO}
+DOCKER_REGISTRY_IMAGE_NAME="${DOCKER_REGISTRY_REPO:+${DOCKER_REGISTRY_DOMAIN:-docker.io}/$DOCKER_REGISTRY_REPO}"
+FINAL_IMAGE_NAME=${IMAGE_NAME:-${DOCKER_REGISTRY_IMAGE_NAME:-texstudio}}
+echo "tag_alias.sh: FINAL_IMAGE_NAME '$FINAL_IMAGE_NAME'"
 
 for aliastag in ${array[@]}; do
-    
+
     echo "tag_alias.sh: tag '$FINAL_IMAGE_NAME:$aliastag'"
     docker tag "$FINAL_IMAGE_NAME:$IMAGE_TAG" "$FINAL_IMAGE_NAME:$aliastag" || exit $?
 
