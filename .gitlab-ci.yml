@@ -7,7 +7,7 @@ stages:
 .docker_login:
   before_script:
     - test -z "$DOCKER_REGISTRY_PASSWORD" && echo "Provided empty password. Make sure DOCKER_REGISTRY_PASSWORD is set."
-    - docker login --username "$DOCKER_REGISTRY_USER" --password "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY_DOMAIN
+    - echo "$DOCKER_REGISTRY_PASSWORD" | docker login --username "$DOCKER_REGISTRY_USER" --password-stdin $DOCKER_REGISTRY_DOMAIN
   variables:
     DOCKER_REGISTRY_DOMAIN: docker.io
     DOCKER_REGISTRY_USER: raabf

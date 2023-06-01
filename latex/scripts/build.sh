@@ -42,8 +42,8 @@ basemap[armhf-sid]="multiarch/debian-debootstrap:armhf-sid";         basemap[arm
 FINAL_IMAGE_NAME=${IMAGE_NAME:-$DOCKER_REGISTRY_DOMAIN/$DOCKER_REGISTRY_REPO}
 
 # $IMAGE_NAME var is injected into the build so the tag is correct.
-docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
-             --build-arg VCS_REF=$(git rev-parse --short HEAD) \
+docker build --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+             --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
              --build-arg BASE_IMAGE="${basemap[${IMAGE_TAG}]}" \
              --build-arg TEXLIVE_VERSION="${versionmap[${IMAGE_TAG##*-}]}" \
              --build-arg PACKAGES_INSTALL="${pkgmap[${IMAGE_TAG##*-}]}" \
